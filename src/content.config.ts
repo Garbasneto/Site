@@ -243,4 +243,102 @@ const depoimentos = defineCollection({
     }),
 });
 
-export const collections = { home, cases, depoimentos };
+/* Textos compartilhados por todas as páginas: nota de cookies, sugestão de idioma, páginas legais. */
+const common = defineCollection({
+  loader: glob({ pattern: '*.yaml', base: './src/content/common' }),
+  schema: z.object({
+    cookies: z.object({
+      label: z.string(),
+      text: z.string(),
+      more: z.string(),
+      accept: z.string(),
+      reject: z.string(),
+      prefs: z.string(),
+      save: z.string(),
+      necessary: z.string(),
+      analytics: z.string(),
+      ads: z.string(),
+      reopen: z.string(),
+    }),
+    language: z.object({
+      /** Frase no idioma sugerido, para quem lê nesse idioma. */
+      suggest: z.object({ pt: z.string(), en: z.string(), es: z.string() }),
+      switch: z.object({ pt: z.string(), en: z.string(), es: z.string() }),
+      dismiss: z.string(),
+    }),
+    legal: z.object({
+      label: z.string(),
+      draft: z.string(),
+      updated: z.string(),
+      back: z.string(),
+    }),
+    og_alt: z.string(),
+  }),
+});
+
+/* Formulário de candidatura (/iniciar), um arquivo por idioma. */
+const choice = z.record(z.string(), z.string());
+const form = defineCollection({
+  loader: glob({ pattern: '*.yaml', base: './src/content/form' }),
+  schema: z.object({
+    meta: z.object({ title: z.string(), description: z.string() }),
+    intro: z.object({ label: z.string(), title: z.string(), support: z.string() }),
+    step_label: z.string(),
+    /** "Pergunta {current} de {total}" (leitores de tela) */
+    progress: z.string(),
+    buttons: z.object({
+      next: z.string(),
+      back: z.string(),
+      submit: z.string(),
+      sending: z.string(),
+      hint: z.string(),
+      close: z.string(),
+    }),
+    privacy: z.object({ before: z.string(), link: z.string(), after: z.string() }),
+    errors: z.object({
+      choice: z.string(),
+      name: z.string(),
+      phone: z.string(),
+      email: z.string(),
+      presence: z.string(),
+      city: z.string(),
+      other: z.string(),
+      /** Envio sem JavaScript com respostas em falta (página volta com #erro). */
+      generic: z.string(),
+    }),
+    questions: z.object({
+      has_studio: z.object({ title: z.string(), options: choice }),
+      role: z.object({ title: z.string(), options: choice }),
+      name: z.object({ title: z.string(), placeholder: z.string() }),
+      whatsapp: z.object({ title: z.string(), country: z.string(), placeholder: z.string() }),
+      email: z.object({ title: z.string(), placeholder: z.string() }),
+      presence: z.object({ title: z.string(), placeholder: z.string() }),
+      city: z.object({ title_studio: z.string(), title_no_studio: z.string(), placeholder: z.string() }),
+      revenue: z.object({ title: z.string(), currency: z.string() }),
+      challenge: z.object({ title: z.string(), options: choice, other_placeholder: z.string() }),
+      invest: z.object({ title: z.string(), options: choice }),
+    }),
+    done: z.object({
+      label: z.string(),
+      title: z.string(),
+      support: z.string(),
+      button: z.string(),
+      /** "Olá, sou {name}, do {studio}. ..." */
+      message: z.string(),
+      back: z.string(),
+    }),
+    external: z.object({ text: z.string(), link: z.string() }),
+  }),
+});
+
+/* Páginas legais em Markdown: src/content/legal/{pt,en,es}/*.md */
+const legal = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/legal' }),
+  schema: z.object({
+    title: z.string(),
+    updated: z.string(),
+    description: z.string(),
+  }),
+});
+
+export const collections = { home, cases, depoimentos, common, form, legal };

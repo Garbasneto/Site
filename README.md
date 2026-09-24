@@ -62,6 +62,41 @@ Salve a foto como `src/assets/fundador.jpg` (ou `.png` ou `.webp`). Ela aparece 
 
 A planta é desenhada a partir de números em `src/data/plan.ts` (paredes, portas, janelas, ambientes e o trajeto dos pontos). Para mudar a planta, mude os números: o desenho plano e a axonometria se ajustam sozinhos. Os nomes dos ambientes vêm dos arquivos de texto.
 
+## Formulário de candidatura
+
+A candidatura fica em `/iniciar` (EN `/en/start`, ES `/es/iniciar`): uma pergunta por tela, Enter avança, letras A a E escolhem as opções. Os textos estão em `src/content/form/*.yaml`; as faixas de faturamento por moeda, em `src/config/site.ts` (`revenueBands`, cada faixa com uma `priority` de 0 a 3).
+
+Para onde vão as respostas (variáveis na Vercel, em Settings > Environment Variables):
+
+- `FORM_WEBHOOK_URL`: endereço do cenário no Make, n8n ou Zapier. Recebe um JSON com as respostas, o idioma, a prioridade (alta, media, baixa), o número de WhatsApp de destino, a origem da visita (primeiro e último toque: UTMs, gclid, gbraid, wbraid, fbclid, página de entrada, site de origem), o país aproximado e o `event_id` (o mesmo enviado ao dataLayer, para deduplicar conversões).
+- `PIPEDRIVE_API_TOKEN` (opcional): cria pessoa, negócio e uma nota com o resumo no Pipedrive.
+- Se o envio falhar, a pessoa vê a tela final e o botão do WhatsApp do mesmo jeito. A candidatura completa fica registrada nos logs da Vercel (Deployments > Functions > Logs, procure por `[lead]`).
+- Proteção contra robôs: campo escondido (honeypot) e tempo mínimo de preenchimento (`form.minFillMs`).
+- O formulário também funciona sem JavaScript (envio normal da página).
+
+WhatsApp de destino: `whatsapp.byCountry` em `src/config/site.ts`, pelo país do telefone de quem se candidata, com `whatsapp.default` para os outros países. O país do seletor vem da localização da Vercel; sem ela, do idioma da página.
+
+Modo alternativo: `FORM_MODE=external` faz todos os botões "Iniciar projeto" apontarem para o Respondi (`form.respondiUrl` em `src/config/site.ts`), levando as UTMs junto. Enquanto a URL estiver como `[PREENCHER]`, o site continua com o formulário próprio.
+
+## Medição (GTM) e cookies
+
+- `PUBLIC_GTM_ID` (ex.: `GTM-XXXXXXX`): o Google Tag Manager entra depois da página carregar. As tags (GA4, Google Ads, Meta) são configuradas no GTM, não no código.
+- Modo de Consentimento v2: tudo negado por padrão, até a pessoa aceitar na nota de cookies. A escolha fica guardada por 12 meses e pode ser mudada no rodapé ("Preferências de cookies") ou na página de Cookies.
+- Eventos no dataLayer: `cta_click` (com `cta_position`), `form_start`, `form_step`, `generate_lead` (com `event_id`), `whatsapp_click`, `language_change` e `consent_update`.
+- Origem da visita: guardada na sessão sempre; entre visitas (90 dias, primeiro e último toque) só com consentimento.
+
+## Páginas legais
+
+Privacidade e Cookies ficam em `src/content/legal/{pt,en,es}/` (Markdown). São rascunhos: enquanto houver `[PREENCHER]`, a página mostra "Rascunho · revisão jurídica pendente", fica fora do Google (noindex) e fora do sitemap. Depois da revisão jurídica, troque os `[PREENCHER]` e atualize a data em `updated`.
+
+## SEO
+
+- Cada página tem canonical, hreflang (pt, en, es e x-default) e Open Graph por idioma.
+- `sitemap.xml` e `robots.txt` são gerados no build.
+- Imagens de partilha (1200x630) em `public/og/{pt,en,es}.png`, feitas a partir do hero real. Para refazer depois de mudar o título: `PUBLIC_DRAFTS=off npm run dev` (o site como vai ao ar, sem exemplos) e, em outro terminal, `npm run og`.
+- Dados estruturados: Organization, ProfessionalService (as áreas atendidas entram quando `areasServed` for preenchido em `src/config/site.ts`) e FAQPage (só com respostas preenchidas).
+- O site nunca redireciona pelo idioma do navegador: mostra uma sugestão discreta, que some ao fechar.
+
 ## Revisão visual
 
 ```
@@ -96,4 +131,6 @@ Marcadas no briefing como [confirmar], [validar] ou [PREENCHER]:
 - [PREENCHER] URL do webhook (FORM_WEBHOOK_URL), token do Pipedrive (opcional), ID do GTM (PUBLIC_GTM_ID), URL do Respondi.
 - [PREENCHER] Razão social, número fiscal e endereço (páginas de Privacidade e Cookies, com revisão jurídica pendente).
 - [Opcional] Número de vagas por trimestre no CTA final, só se for real (`cta.slots` nos arquivos de texto).
-- Páginas de Privacidade e Cookies: chegam na Etapa 3 (os links do rodapé já apontam para elas).
+- [PREENCHER] Prazo de conservação das candidaturas e ferramentas de automação/CRM usadas (Política de privacidade).
+- [PREENCHER] E-mail de privacidade.
+- Revisão jurídica das páginas de Privacidade e Cookies.

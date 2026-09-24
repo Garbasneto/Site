@@ -1,4 +1,5 @@
 ---
+import { startHref } from '../lib/form-mode';
 import Wordmark from './Wordmark.astro';
 import Arrow from './Arrow.astro';
 import { locales, path, type Locale, type RouteKey } from '../i18n';
@@ -8,13 +9,17 @@ interface Props {
   lang: Locale;
   nav: Home['nav'];
   route?: RouteKey;
+  /** false nas páginas sem índice de folhas (páginas legais). */
+  index?: boolean;
+  /** Barra sempre com fundo (páginas sem o script de navegação da home). */
+  solid?: boolean;
 }
 
-const { lang, nav, route = 'home' } = Astro.props;
+const { lang, nav, route = 'home', index = true, solid = false } = Astro.props;
 ---
 
 <a class="skip-link" href="#conteudo">{nav.skip}</a>
-<header class="nav" data-nav>
+<header class:list={['nav', solid && 'is-solid']} data-nav>
   <a class="nav__home" href={path('home', lang)} aria-label={nav.home}>
     <Wordmark />
   </a>
@@ -38,11 +43,15 @@ const { lang, nav, route = 'home' } = Astro.props;
         }
       </ul>
     </nav>
-    <button class="nav__index" type="button" aria-expanded="false" aria-controls="sheet-index" data-index-toggle>
-      <span class="nav__index-icon" aria-hidden="true"></span>
-      {nav.index}
-    </button>
-    <a class="btn btn--compact nav__cta" href={path('start', lang)} data-cta="nav">
+    {
+      index && (
+        <button class="nav__index" type="button" aria-expanded="false" aria-controls="sheet-index" data-index-toggle>
+          <span class="nav__index-icon" aria-hidden="true" />
+          {nav.index}
+        </button>
+      )
+    }
+    <a class="btn btn--compact nav__cta" href={startHref(lang)} data-cta="nav">
       {nav.cta}
       <span class="btn__icon"><Arrow /></span>
     </a>

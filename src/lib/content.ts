@@ -12,9 +12,9 @@ export type SheetId = Home['sheets'][number]['id'];
 
 /**
   Cases e depoimentos não publicados aparecem só em desenvolvimento (com a marca "EXEMPLO").
-  No build de produção, somem.
+  No build de produção, somem. PUBLIC_DRAFTS=off no dev mostra o site como vai ao ar (usado por npm run og).
 */
-export const showDrafts = import.meta.env.DEV;
+export const showDrafts = import.meta.env.DEV && import.meta.env.PUBLIC_DRAFTS !== 'off';
 
 export async function getCases() {
   const all = await getCollection('cases');

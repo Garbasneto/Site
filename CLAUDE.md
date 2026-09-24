@@ -28,6 +28,9 @@ Público: arquitetos e designers de interiores com atelier próprio, 30 a 55 ano
 - Configurações (WhatsApp por país, e-mail, redes, cidades, modo do formulário, URL do Respondi, faixas de faturamento) em `src/config/site.ts`.
 - Cases (`src/content/cases/*.yaml`) e depoimentos (`src/content/depoimentos/*.yaml`): um arquivo por item, com blocos `pt`/`en`/`es` para os textos e números uma vez só. Campo `publicado`: em desenvolvimento, os não publicados aparecem com marca d'água "EXEMPLO"; em produção, somem. Sem nenhum publicado, a folha e o item do índice somem e a numeração se ajusta (`src/components/Home.astro`).
 - Placeholders sempre no formato `[PREENCHER: o que é]`.
+- Formulário (`src/content/form/*.yaml`): validação única em `src/lib/lead.ts`, usada no navegador (`src/scripts/lead-form.ts`) e no servidor (`src/pages/api/lead.ts`). O envio nunca bloqueia a tela final. Na última pergunta não há avanço automático: o botão e a nota de privacidade ficam à vista.
+- Páginas legais em `src/content/legal/{pt,en,es}/*.md`. Com `[PREENCHER]`, ficam noindex e fora do sitemap.
+- Textos compartilhados (nota de cookies, sugestão de idioma, rótulos legais) em `src/content/common/*.yaml`.
 
 ## Direção de arte
 
@@ -50,7 +53,8 @@ Público: arquitetos e designers de interiores com atelier próprio, 30 a 55 ano
 
 - Astro 7 + TypeScript, CSS próprio com tokens e estilos com escopo. Sem Tailwind.
 - GSAP (ScrollTrigger, SplitText, DrawSVG), Lenis. Sem WebGL e sem Three.js.
-- Adapter da Vercel; o endpoint do formulário é serverless (`prerender = false`).
+- Adapter da Vercel; o endpoint do formulário é serverless (`prerender = false`). Por isso `astro preview` não serve o build: para medir, sirva `.vercel/output/static`.
+- Medição só por dataLayer (`src/scripts/track.ts`), GTM carregado depois da página. Consent Mode v2 negado por padrão no `<head>` de `src/layouts/Base.astro`. Origem da visita em `src/scripts/attribution.ts` (entre visitas só com consentimento).
 - Cada folha usa `src/components/Sheet.astro` (rótulo, título, apoio) e fica em `src/components/sheets/`. Linhas que abrem (Serviços, Perguntas): `Row.astro` + `src/scripts/rows.ts`.
 - Revelações: `data-reveal="lines"` (máscara por linha), `data-reveal="fade"`, `data-reveal-item` (itens de lista). JS das folhas em `src/scripts/sections.ts`, carregado à parte depois do hero.
 - Folhas escuras (`dark` no `Sheet`): fundo grafite próprio; a camada `[data-dark-layer]` escurece a página na aproximação e a classe `on-dark` no `<html>` inverte a barra, o indicador e o CTA do celular.
@@ -73,6 +77,7 @@ npm run check        tipos (astro check) e regras de copy
 npm run check:copy   só as regras de copy
 npm run shots        screenshots do hero (390x844 e 1440x900) em screenshots/latest
 npm run shots:sheets screenshots de todas as folhas, índice, grelha e 404 em screenshots/sheets
+npm run og           imagens de partilha (public/og) a partir do hero, com PUBLIC_DRAFTS=off npm run dev rodando
 ```
 
 ## Modo de trabalho

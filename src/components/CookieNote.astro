@@ -1,0 +1,154 @@
+---
+/*
+  Nota de cookies: uma pequena nota técnica no canto (Consent Mode v2).
+  Aceitar e recusar com o mesmo peso; preferências por categoria. Comportamento em src/scripts/consent.ts.
+*/
+import { path, type Locale } from '../i18n';
+
+interface Props {
+  lang: Locale;
+  text: {
+    label: string;
+    text: string;
+    more: string;
+    accept: string;
+    reject: string;
+    prefs: string;
+    save: string;
+    necessary: string;
+    analytics: string;
+    ads: string;
+  };
+}
+
+const { lang, text } = Astro.props;
+---
+
+<aside class="cnote" data-cookie-note aria-labelledby="cnote-title" hidden>
+  <p class="cnote__label" id="cnote-title">{text.label}</p>
+  <p class="cnote__text">
+    {text.text}{' '}<a href={path('cookies', lang)}>{text.more}</a>
+  </p>
+  <fieldset class="cnote__prefs" data-cookie-prefs hidden>
+    <legend class="visually-hidden">{text.prefs}</legend>
+    <label class="cnote__opt"><input type="checkbox" checked disabled /> <span>{text.necessary}</span></label>
+    <label class="cnote__opt"><input type="checkbox" name="consent-analytics" /> <span>{text.analytics}</span></label>
+    <label class="cnote__opt"><input type="checkbox" name="consent-ads" /> <span>{text.ads}</span></label>
+  </fieldset>
+  <div class="cnote__actions">
+    <button class="cnote__btn" type="button" data-consent="reject">{text.reject}</button>
+    <button class="cnote__btn" type="button" data-consent="accept">{text.accept}</button>
+    <button class="cnote__btn cnote__btn--save" type="button" data-consent="save" hidden>{text.save}</button>
+    <button class="cnote__link" type="button" data-consent="prefs" aria-expanded="false">{text.prefs}</button>
+  </div>
+</aside>
+
+<style>
+  .cnote {
+    position: fixed;
+    top: calc(var(--nav-h) + var(--s-2));
+    right: var(--margin);
+    left: var(--margin);
+    z-index: 70;
+    padding: var(--s-4);
+    background: var(--paper);
+    color: var(--graphite);
+    border: 1px solid var(--graphite);
+    opacity: 0;
+    transform: translateY(-8px);
+    transition:
+      opacity var(--dur-1) var(--ease),
+      transform var(--dur-1) var(--ease);
+  }
+
+  .cnote:global(.is-visible) {
+    opacity: 1;
+    transform: none;
+  }
+
+  .cnote__label {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--concrete);
+  }
+
+  .cnote__text {
+    margin-top: var(--s-2);
+    font-size: 0.8125rem;
+    line-height: 1.45;
+  }
+
+  .cnote__text a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .cnote__prefs {
+    margin: var(--s-3) 0 0;
+    padding: var(--s-2) 0 0;
+    border: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .cnote__opt {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    min-height: 32px;
+    font-size: 0.8125rem;
+  }
+
+  .cnote__opt input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--graphite);
+  }
+
+  .cnote__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-2);
+    margin-top: var(--s-3);
+  }
+
+  .cnote__btn {
+    min-height: 36px;
+    padding: 0 var(--s-4);
+    border: 1px solid var(--graphite);
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    transition:
+      background-color 0.2s linear,
+      color 0.2s linear;
+  }
+
+  @media (hover: hover) {
+    .cnote__btn:hover {
+      background: var(--graphite);
+      color: var(--paper);
+    }
+  }
+
+  .cnote__link {
+    min-height: 36px;
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  @media (min-width: 768px) {
+    .cnote {
+      left: auto;
+      width: 360px;
+    }
+  }
+</style>

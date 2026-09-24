@@ -1,17 +1,42 @@
 ---
+/*
+  Estrutura de todas as páginas: SEO (canonical, hreflang, Open Graph, JSON-LD),
+  Consent Mode v2 negado por padrão antes de qualquer tag, GTM carregado depois da página,
+  nota de cookies e sugestão discreta de idioma.
+*/
 import '../styles/global.css';
-import { htmlLang, type Locale } from '../i18n';
+import { getEntry } from 'astro:content';
+import { PUBLIC_GTM_ID } from 'astro:env/client';
+import CookieNote from '../components/CookieNote.astro';
+import LangSuggest from '../components/LangSuggest.astro';
+import { alternates, defaultLocale, htmlLang, locales, type Locale, type RouteKey } from '../i18n';
 
 interface Props {
   lang: Locale;
   title: string;
   description: string;
+  /** Rota equivalente nos três idiomas (hreflang e canonical). null em páginas sem equivalente (404). */
+  route?: RouteKey | null;
+  noindex?: boolean;
+  /** Blocos JSON-LD da página. */
+  jsonld?: Record<string, unknown>[];
+  /** Imagem de partilha (1200x630). Padrão: a planta no idioma da página. */
+  image?: string;
   /** Classe extra no <body> (ex.: página escura). */
   bodyClass?: string;
+  /** Cor da barra do navegador. */
+  themeColor?: string;
 }
 
-const { lang, title, description, bodyClass } = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site).toString().replace(/\/$/, '') || Astro.site?.toString();
+const { lang, title, description, route = null, noindex = false, jsonld = [], image, bodyClass, themeColor = '#f3f1ec' } = Astro.props;
+const common = (await getEntry('common', lang))!.data;
+const site = Astro.site!;
+const abs = (p: string) => new URL(p, site).toString().replace(/\/$/, '') || site.toString();
+const alts = route ? alternates(route) : null;
+const canonical = alts ? abs(alts[lang]) : abs(Astro.url.pathname);
+const ogImage = abs(image ?? `/og/${lang}.png`);
+const ogLocale: Record<Locale, string> = { pt: 'pt_PT', en: 'en_US', es: 'es_ES' };
+const gtmId = PUBLIC_GTM_ID || '';
 ---
 
 <!doctype html>
@@ -21,8 +46,32 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString().replace(/\/
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="canonical" href={canonical} />
-    <meta name="theme-color" content="#f3f1ec" />
+    {
+      alts && (
+        <>
+          {locales.map((l) => (
+            <link rel="alternate" hreflang={htmlLang[l]} href={abs(alts[l])} />
+          ))}
+          <link rel="alternate" hreflang="x-default" href={abs(alts[defaultLocale])} />
+        </>
+      )
+    }
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Hub Performance" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={common.og_alt} />
+    <meta property="og:locale" content={ogLocale[lang]} />
+    {locales.filter((l) => l !== lang).map((l) => <meta property="og:locale:alternate" content={ogLocale[l]} />)}
+    {lang === 'pt' && <meta property="og:locale:alternate" content="pt_BR" />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content={themeColor} />
     <meta name="color-scheme" content="light" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preload" href="/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin />
@@ -34,9 +83,69 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString().replace(/\/
         if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) c.add('motion');
       })(document);
     </script>
+    <script is:inline define:vars={{ gtmId }}>
+      // Consent Mode v2: tudo negado por padrão, antes de qualquer tag.
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        window.dataLayer.push(arguments);
+      }
+      window.gtag = gtag;
+      gtag('consent', 'default', {
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        analytics_storage: 'denied',
+        functionality_storage: 'granted',
+        security_storage: 'granted',
+        wait_for_update: 500,
+      });
+      gtag('set', 'ads_data_redaction', true);
+      try {
+        var saved = JSON.parse(localStorage.getItem('hp-consent') || 'null');
+        if (saved && saved.v === 1 && Date.now() - saved.t < 31536000000) {
+          gtag('consent', 'update', {
+            analytics_storage: saved.analytics ? 'granted' : 'denied',
+            ad_storage: saved.ads ? 'granted' : 'denied',
+            ad_user_data: saved.ads ? 'granted' : 'denied',
+            ad_personalization: saved.ads ? 'granted' : 'denied',
+          });
+        }
+      } catch (e) {}
+      // GTM entra depois da página pronta, para não pesar no primeiro carregamento.
+      if (gtmId) {
+        var loaded = false;
+        var load = function () {
+          if (loaded) return;
+          loaded = true;
+          window.dataLayer.push({ 'gtm.start': Date.now(), event: 'gtm.js' });
+          var s = document.createElement('script');
+          s.async = true;
+          s.src = 'https://www.googletagmanager.com/gtm.js?id=' + gtmId;
+          document.head.appendChild(s);
+        };
+        window.addEventListener('load', function () {
+          if ('requestIdleCallback' in window) window.requestIdleCallback(load, { timeout: 3000 });
+          else setTimeout(load, 1500);
+        });
+      }
+    </script>
+    {jsonld.map((j) => <script type="application/ld+json" set:html={JSON.stringify(j)} />)}
     <slot name="head" />
   </head>
   <body class={bodyClass}>
+    {
+      gtmId && (
+        <noscript>
+          <iframe src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`} height="0" width="0" style="display:none;visibility:hidden" title="GTM" />
+        </noscript>
+      )
+    }
     <slot />
+    <CookieNote lang={lang} text={common.cookies} />
+    {route && <LangSuggest lang={lang} route={route} text={common.language} />}
   </body>
 </html>
+
+<script>
+  import '../scripts/site';
+</script>

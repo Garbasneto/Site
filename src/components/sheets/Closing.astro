@@ -3,6 +3,7 @@
   F.08 · Iniciar projeto e rodapé. Fundo grafite.
   O rodapé é o carimbo da última folha: uma tabela de fios finos.
 */
+import { startHref } from '../../lib/form-mode';
 import Sheet from '../Sheet.astro';
 import Arrow from '../Arrow.astro';
 import Wordmark from '../Wordmark.astro';
@@ -14,12 +15,13 @@ interface Props {
   lang: Locale;
   content: Home['cta'];
   footer: Home['footer'];
+  cookiesLabel: string;
   sheet: NumberedSheet;
   prefix: string;
   total: string;
 }
 
-const { lang, content, footer, sheet, prefix, total } = Astro.props;
+const { lang, content, footer, cookiesLabel, sheet, prefix, total } = Astro.props;
 const year = new Date().getFullYear();
 const digits = (v: string) => v.replace(/\D/g, '');
 const wa = site.whatsapp.default;
@@ -28,7 +30,7 @@ const wa = site.whatsapp.default;
 <Sheet id={sheet.id} prefix={prefix} number={sheet.number} total={total} label={sheet.label} title={content.title} dark splitSentences class="closing">
   <div class="closing__cta wrap grid">
     <div class="closing__action">
-      <a class="btn closing__btn" href={path('start', lang)} data-cta="final" data-magnetic>
+      <a class="btn closing__btn" href={startHref(lang)} data-cta="final" data-magnetic>
         <span>{content.button}</span>
         <span class="btn__icon"><Arrow /></span>
       </a>
@@ -90,6 +92,7 @@ const wa = site.whatsapp.default;
       <div class="stamp__cell">
         <a class="stamp__v" href={path('privacy', lang)}>{footer.privacy}</a>
         <a class="stamp__v" href={path('cookies', lang)}>{footer.cookies}</a>
+        <button class="stamp__v stamp__btn" type="button" data-cookie-open>{cookiesLabel}</button>
         {
           site.complaintsBookUrl && (
             <a class="stamp__v" href={site.complaintsBookUrl} rel="noopener" target="_blank">
@@ -204,6 +207,18 @@ const wa = site.whatsapp.default;
     a.stamp__v:hover {
       text-decoration-color: currentColor;
     }
+  }
+
+  .stamp__btn {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    align-self: flex-start;
+    color: var(--fg-muted);
+    text-align: left;
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+    text-underline-offset: 4px;
   }
 
   .stamp__langs {

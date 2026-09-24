@@ -1,0 +1,92 @@
+meta:
+  title: "Application for a diagnostic · Hub Performance"
+  description: "Apply for the diagnostic led by the founder of Hub Performance. It takes 2 minutes."
+
+intro:
+  label: "Application"
+  title: "Application for a diagnostic"
+  support: "It takes 2 minutes. Only apply if you mean it: the founder reads every application."
+
+step_label: "Question"
+progress: "Question {current} of {total}"
+
+buttons:
+  next: "Continue"
+  back: "Back"
+  submit: "Send application"
+  sending: "One moment"
+  hint: "or press Enter"
+  close: "Back to the site"
+
+privacy:
+  before: "By sending, you accept the "
+  link: "privacy policy"
+  after: "."
+
+errors:
+  choice: "Pick an option to continue."
+  name: "Type your name to continue."
+  phone: "Check the number: it looks incomplete or too long."
+  email: "Check the email: it looks incomplete."
+  presence: "Add the Instagram handle or the website address."
+  city: "Add the city and country."
+  other: "Describe the challenge in a few words."
+  generic: "Some answers are missing or invalid. Review the questions and send again."
+
+questions:
+  has_studio:
+    title: "Do you have your own studio?"
+    options: { "yes": "Yes", "no": "Not yet" }
+  role:
+    title: "How would you describe yourself?"
+    options:
+      architect: "Architect"
+      interior: "Interior designer"
+      owner: "Studio partner or owner"
+      other: "Other"
+  name:
+    title: "What is your name?"
+    placeholder: "First and last name"
+  whatsapp:
+    title: "What is your WhatsApp number?"
+    country: "Country"
+    placeholder: "Number"
+  email:
+    title: "And your email?"
+    placeholder: "name@studio.com"
+  presence:
+    title: "Professional Instagram or studio website"
+    placeholder: "@studio or studio.com"
+  city:
+    title_studio: "In which city and country is the studio?"
+    title_no_studio: "In which city and country do you work?"
+    placeholder: "City, country"
+  revenue:
+    title: "What is the studio's average monthly revenue?"
+    currency: "Currency"
+  challenge:
+    title: "What is the biggest challenge right now?"
+    options:
+      few: "Too few quote requests"
+      unqualified: "Inquiries that are not a fit"
+      closing: "Trouble closing contracts"
+      referrals: "Relying on referrals"
+      other: "Other"
+    other_placeholder: "Which one?"
+  invest:
+    title: "Can you invest in the studio's growth over the next 90 days?"
+    options:
+      now: "Yes, I want to start now"
+      soon: "Yes, within the next 30 days"
+
+done:
+  label: "Received"
+  title: "Application received."
+  support: "The next step is a quick conversation on WhatsApp."
+  button: "Chat on WhatsApp now"
+  message: "Hi, I'm {name}, from {studio}. I just sent my application through the website."
+  back: "Back to the site"
+
+external:
+  text: "The application opens in the Hub Performance form."
+  link: "Open the application"

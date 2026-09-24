@@ -127,7 +127,11 @@ for (const file of files) {
     walkData(yaml.load(raw), langOf(rel), [], rel);
   } else if (ext === '.md' || ext === '.mdx') {
     const lang = langOf(rel);
-    raw.split('\n').forEach((line, i) => lang && checkText(line.replace(/^\s*[-*]\s+/, ''), lang, `${rel}:${i + 1}`));
+    // Delimitadores do frontmatter e separadores de tabela (|---|) não são texto.
+    const structural = /^[\s|:-]*$/;
+    raw.split('\n').forEach((line, i) => {
+      if (lang && !structural.test(line)) checkText(line.replace(/^\s*[-*]\s+/, ''), lang, `${rel}:${i + 1}`);
+    });
   }
 }
 

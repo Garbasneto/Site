@@ -1,0 +1,94 @@
+# Formulário de candidatura (português). Uma pergunta por tela.
+meta:
+  title: "Candidatura para diagnóstico · Hub Performance"
+  description: "Candidatura para o diagnóstico conduzido pelo fundador da Hub Performance. Leva 2 minutos."
+
+intro:
+  label: "Candidatura"
+  title: "Candidatura para diagnóstico"
+  support: "Leva 2 minutos. Preencha só se for para valer: cada candidatura é lida pelo fundador."
+
+step_label: "Pergunta"
+progress: "Pergunta {current} de {total}"
+
+buttons:
+  next: "Continuar"
+  back: "Voltar"
+  submit: "Enviar candidatura"
+  sending: "Um momento"
+  hint: "ou use a tecla Enter"
+  close: "Voltar ao site"
+
+privacy:
+  before: "Ao enviar, aceita a "
+  link: "política de privacidade"
+  after: "."
+
+errors:
+  choice: "Escolha uma opção para continuar."
+  name: "Escreva o seu nome para continuar."
+  phone: "Confira o número: parece incompleto ou com dígitos a mais."
+  email: "Confira o e-mail: parece incompleto."
+  presence: "Informe o @ do Instagram ou o endereço do site."
+  city: "Informe a cidade e o país."
+  other: "Descreva o desafio em poucas palavras."
+  generic: "Faltam respostas ou há um campo inválido. Reveja as perguntas e envie de novo."
+
+questions:
+  has_studio:
+    title: "Tem atelier ou estúdio próprio?"
+    options: { "yes": "Sim", "no": "Ainda não" }
+  role:
+    title: "Como se descreve?"
+    options:
+      architect: "Arquiteto(a)"
+      interior: "Designer de interiores"
+      owner: "Sócio(a) ou dono(a) de atelier"
+      other: "Outro"
+  name:
+    title: "Qual é o seu nome?"
+    placeholder: "Nome completo"
+  whatsapp:
+    title: "Qual é o seu WhatsApp?"
+    country: "País"
+    placeholder: "Número"
+  email:
+    title: "E o seu e-mail?"
+    placeholder: "nome@atelier.com"
+  presence:
+    title: "Instagram profissional ou site do atelier"
+    placeholder: "@atelier ou atelier.com"
+  city:
+    title_studio: "Em que cidade e país fica o atelier?"
+    title_no_studio: "Em que cidade e país trabalha?"
+    placeholder: "Cidade, país"
+  revenue:
+    title: "Qual é o faturamento médio mensal do atelier?"
+    currency: "Moeda"
+  challenge:
+    title: "Qual é o maior desafio hoje?"
+    options:
+      few: "Poucos pedidos de orçamento"
+      unqualified: "Pedidos sem perfil"
+      closing: "Dificuldade em fechar contratos"
+      referrals: "Dependência de indicações"
+      other: "Outro"
+    other_placeholder: "Qual?"
+  invest:
+    title: "Pode investir no crescimento do atelier nos próximos 90 dias?"
+    options:
+      now: "Sim, quero começar já"
+      soon: "Sim, nos próximos 30 dias"
+
+done:
+  label: "Recebida"
+  title: "Candidatura recebida."
+  support: "O próximo passo é uma conversa rápida no WhatsApp."
+  button: "Falar agora no WhatsApp"
+  message: "Olá, sou {name}, do {studio}. Acabei de enviar a candidatura pelo site."
+  back: "Voltar ao site"
+
+# Modo externo (FORM_MODE=external): a página leva ao Respondi.
+external:
+  text: "A candidatura abre no formulário da Hub Performance."
+  link: "Abrir a candidatura"

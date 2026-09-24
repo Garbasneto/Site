@@ -1,4 +1,5 @@
 ---
+import { startHref } from '../lib/form-mode';
 import Base from '../layouts/Base.astro';
 import Header from './Header.astro';
 import Hero from './hero/Hero.astro';
@@ -13,7 +14,9 @@ import SheetIndex from './SheetIndex.astro';
 import SheetIndicator from './SheetIndicator.astro';
 import MobileCta from './MobileCta.astro';
 import GridOverlay from './GridOverlay.astro';
-import { getCases, getHome, getTestimonials, numberSheets, type SheetId } from '../lib/content';
+import { getEntry } from 'astro:content';
+import { getCases, getHome, getTestimonials, isPlaceholder, numberSheets, type SheetId } from '../lib/content';
+import { site } from '../config/site';
 import { path, type Locale } from '../i18n';
 
 interface Props {
@@ -46,9 +49,37 @@ const palavra = get('palavra');
 const paraQuem = get('para-quem');
 const perguntas = get('perguntas');
 const iniciar = get('iniciar');
+const common = (await getEntry('common', lang))!.data;
+
+// Dados estruturados: organização e serviço profissional (as áreas atendidas entram quando preenchidas).
+const origin = Astro.site!.toString().replace(/\/$/, '');
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    '@id': `${origin}/#organization`,
+    name: 'Hub Performance',
+    url: `${origin}/`,
+    sameAs: [site.instagram.url],
+    ...(isPlaceholder(site.email) ? {} : { email: site.email }),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ProfessionalService',
+    '@id': `${origin}/#service`,
+    name: 'Hub Performance',
+    url: `${origin}${path('home', lang)}`,
+    description: home.meta.description,
+    image: `${origin}/og/${lang}.png`,
+    provider: { '@id': `${origin}/#organization` },
+    knowsLanguage: ['pt', 'en', 'es'],
+    serviceType: home.services.items.map((i) => i.name),
+    ...(site.areasServed.length ? { areaServed: site.areasServed } : {}),
+  },
+];
 ---
 
-<Base lang={lang} title={home.meta.title} description={home.meta.description}>
+<Base lang={lang} title={home.meta.title} description={home.meta.description} route="home" jsonld={jsonld}>
   <div class="dark-layer" aria-hidden="true" data-dark-layer></div>
   <Header lang={lang} nav={home.nav} />
   <main id="conteudo">
@@ -75,10 +106,10 @@ const iniciar = get('iniciar');
     }
     {paraQuem && <Fit content={home.fit} sheet={paraQuem} prefix={prefix} total={total} />}
     {perguntas && <Faq content={home.faq} sheet={perguntas} prefix={prefix} total={total} />}
-    {iniciar && <Closing lang={lang} content={home.cta} footer={home.footer} sheet={iniciar} prefix={prefix} total={total} />}
+    {iniciar && <Closing lang={lang} content={home.cta} footer={home.footer} cookiesLabel={common.cookies.reopen} sheet={iniciar} prefix={prefix} total={total} />}
   </main>
   <SheetIndicator initial={code('planta')} />
-  <MobileCta href={path('start', lang)} label={home.nav.cta} />
+  <MobileCta href={startHref(lang)} label={home.nav.cta} />
   <SheetIndex lang={lang} content={home.index} nav={home.nav} sheets={sheets.list} />
   <GridOverlay />
 </Base>

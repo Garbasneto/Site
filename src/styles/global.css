@@ -232,6 +232,10 @@ html.lenis body {
   color: var(--graphite);
 }
 
+.sheet--dark .btn:focus-visible {
+  outline-color: var(--paper);
+}
+
 .btn--compact {
   min-height: 36px;
   gap: var(--s-3);

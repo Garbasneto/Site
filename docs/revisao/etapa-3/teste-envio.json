@@ -1,0 +1,170 @@
+{
+  "nota": "Teste automático (Playwright, 390x844): chegada por anúncio com UTMs e fbclid, aceite de cookies, clique no botão do hero, 10 perguntas, envio, clique no WhatsApp e troca de idioma. Dados fictícios.",
+  "datalayer": [
+    {
+      "page": "/",
+      "event": "consent_update",
+      "consent_analytics": true,
+      "consent_ads": true
+    },
+    {
+      "page": "/",
+      "event": "cta_click",
+      "cta_position": "hero",
+      "cta_url": "http://127.0.0.1:4321/iniciar"
+    },
+    {
+      "page": "/iniciar",
+      "event": "form_start",
+      "form_language": "pt"
+    },
+    {
+      "page": "/iniciar",
+      "event": "form_step",
+      "step_number": 2,
+      "step_id": "role",
+      "steps_total": 10
+    },
+    {
+      "page": "/iniciar",
+      "event": "form_step",
+      "step_number": 3,
+      "step_id": "name",
+      "steps_total": 10
+    },
+    {
+      "page": "/iniciar",
+      "event": "form_step",
+      "step_number": 4,
+      "step_id": "whatsapp",
+      "steps_total": 10
+    },
+    {
+      "page": "/iniciar",
+      "event": "form_step",
+      "step_number": 5,
+      "step_id": "email",
+      "steps_total": 10
+    },
+    {
+      "page": "/iniciar",
+      "event": "form_step",
+      "step_number": 6,
+      "step_id": "presence",
+      "steps_total": 10
+    },
+    {
+      "page": "/iniciar",
+      "event": "form_step",
+      "step_number": 7,
+      "step_id": "city",
+      "steps_total": 10
+    },
+    {
+      "page": "/iniciar",
+      "event": "form_step",
+      "step_number": 8,
+      "step_id": "revenue",
+      "steps_total": 10
+    },
+    {
+      "page": "/iniciar",
+      "event": "form_step",
+      "step_number": 9,
+      "step_id": "challenge",
+      "steps_total": 10
+    },
+    {
+      "page": "/iniciar",
+      "event": "form_step",
+      "step_number": 10,
+      "step_id": "invest",
+      "steps_total": 10
+    },
+    {
+      "page": "/iniciar",
+      "event": "generate_lead",
+      "form_language": "pt",
+      "has_studio": "yes",
+      "revenue_band": "eur-1",
+      "currency": "EUR",
+      "event_id": "f39a4054-16ce-4935-805c-f13acb45405f"
+    },
+    {
+      "page": "/iniciar",
+      "event": "whatsapp_click",
+      "whatsapp_position": "form_done"
+    },
+    {
+      "page": "/",
+      "event": "language_change",
+      "language_from": "pt",
+      "language_to": "en"
+    }
+  ],
+  "webhook_recebido": {
+    "event_id": "f39a4054-16ce-4935-805c-f13acb45405f",
+    "submitted_at": "2026-09-24T23:26:52.819Z",
+    "language": "pt",
+    "answers": {
+      "has_studio": "yes",
+      "role": "architect",
+      "name": "Marta Teste",
+      "phone_country": "PT",
+      "phone": "+351912345678",
+      "email": "marta@exemplo.pt",
+      "presence": "@atelier.teste",
+      "city": "Porto, Portugal",
+      "currency": "EUR",
+      "revenue": "eur-1",
+      "challenge": "other",
+      "challenge_other": "Leads fora da região",
+      "invest": "now"
+    },
+    "priority": {
+      "level": "media",
+      "score": 1
+    },
+    "whatsapp_destination": null,
+    "attribution": {
+      "first_touch": {
+        "utm_source": "instagram",
+        "utm_medium": "paid_social",
+        "utm_campaign": "teste_etapa3",
+        "utm_content": "video01",
+        "utm_term": null,
+        "gclid": null,
+        "gbraid": null,
+        "wbraid": null,
+        "fbclid": "IwAR_teste",
+        "landing_page": "/",
+        "referrer": null,
+        "at": "2026-09-24T23:26:33.655Z"
+      },
+      "last_touch": {
+        "utm_source": "instagram",
+        "utm_medium": "paid_social",
+        "utm_campaign": "teste_etapa3",
+        "utm_content": "video01",
+        "utm_term": null,
+        "gclid": null,
+        "gbraid": null,
+        "wbraid": null,
+        "fbclid": "IwAR_teste",
+        "landing_page": "/",
+        "referrer": null,
+        "at": "2026-09-24T23:26:33.655Z"
+      }
+    },
+    "page": "/iniciar",
+    "visitor_country": null,
+    "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Mobile/15E148 Safari/604.1"
+  },
+  "whatsapp_link": "https://wa.me/?text=Ol%C3%A1%2C%20sou%20Marta%20Teste%2C%20do%20%40atelier.teste.%20Acabei%20de%20enviar%20a%20candidatura%20pelo%20site.",
+  "armazenamento": {
+    "local": "{\"first\":{\"params\":{\"utm_source\":\"instagram\",\"utm_medium\":\"paid_social\",\"utm_campaign\":\"teste_etapa3\",\"utm_content\":\"video01\",\"fbclid\":\"IwAR_teste\"},\"landing\":\"/\",\"referrer\":\"\",\"t\":1790292393655},\"last\":{\"params\":{\"utm_source\":\"instagram\",\"utm_medium\":\"paid_social\",\"utm_campaign\":\"teste_etapa3\",\"utm_content\":\"video01\",\"fbclid\":\"IwAR_teste\"},\"landing\":\"/\",\"referrer\":\"\",\"t\":1790292393655}}",
+    "session": "{\"first\":{\"params\":{\"utm_source\":\"instagram\",\"utm_medium\":\"paid_social\",\"utm_campaign\":\"teste_etapa3\",\"utm_content\":\"video01\",\"fbclid\":\"IwAR_teste\"},\"landing\":\"/\",\"referrer\":\"\",\"t\":1790292393655},\"last\":{\"params\":{\"utm_source\":\"instagram\",\"utm_medium\":\"paid_social\",\"utm_campaign\":\"teste_etapa3\",\"utm_content\":\"video01\",\"fbclid\":\"IwAR_teste\"},\"landing\":\"/\",\"referrer\":\"\",\"t\":1790292393655}}",
+    "consent": "{\"v\":1,\"analytics\":true,\"ads\":true,\"t\":1790292395846}"
+  },
+  "erros_no_console": []
+}

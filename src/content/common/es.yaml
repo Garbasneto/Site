@@ -1,0 +1,31 @@
+cookies:
+  label: "Nota · Cookies"
+  text: "Usamos cookies para medir campañas y mejorar la web. Las de análisis y publicidad, solo con tu consentimiento."
+  more: "Política de cookies"
+  accept: "Aceptar"
+  reject: "Rechazar"
+  prefs: "Preferencias"
+  save: "Guardar elección"
+  necessary: "Necesarias (siempre activas)"
+  analytics: "Análisis"
+  ads: "Publicidad"
+  reopen: "Preferencias de cookies"
+
+language:
+  suggest:
+    pt: "Esta página também está em português."
+    en: "This page is also available in English."
+    es: "Esta página también está en español."
+  switch:
+    pt: "Ver em português"
+    en: "View in English"
+    es: "Ver en español"
+  dismiss: "Cerrar"
+
+legal:
+  label: "Documento"
+  draft: "Borrador · revisión jurídica pendiente"
+  updated: "Actualización"
+  back: "Volver a la planta"
+
+og_alt: "Planta con las etapas del proceso comercial y el cajetín de Hub Performance."

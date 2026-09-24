@@ -1,0 +1,92 @@
+meta:
+  title: "Solicitud de diagnóstico · Hub Performance"
+  description: "Solicita el diagnóstico dirigido por el fundador de Hub Performance. Son 2 minutos."
+
+intro:
+  label: "Solicitud"
+  title: "Solicitud de diagnóstico"
+  support: "Son 2 minutos. Rellénala solo si vas en serio: el fundador lee cada solicitud."
+
+step_label: "Pregunta"
+progress: "Pregunta {current} de {total}"
+
+buttons:
+  next: "Continuar"
+  back: "Atrás"
+  submit: "Enviar solicitud"
+  sending: "Un momento"
+  hint: "o pulsa Enter"
+  close: "Volver a la web"
+
+privacy:
+  before: "Al enviar, aceptas la "
+  link: "política de privacidad"
+  after: "."
+
+errors:
+  choice: "Elige una opción para continuar."
+  name: "Escribe tu nombre para continuar."
+  phone: "Revisa el número: parece incompleto o con dígitos de más."
+  email: "Revisa el correo: parece incompleto."
+  presence: "Indica el @ de Instagram o la dirección de la web."
+  city: "Indica la ciudad y el país."
+  other: "Describe el reto en pocas palabras."
+  generic: "Faltan respuestas o hay un campo no válido. Revisa las preguntas y vuelve a enviar."
+
+questions:
+  has_studio:
+    title: "¿Tienes estudio propio?"
+    options: { "yes": "Sí", "no": "Todavía no" }
+  role:
+    title: "¿Cómo te describes?"
+    options:
+      architect: "Arquitecto/a"
+      interior: "Interiorista"
+      owner: "Socio/a o propietario/a de estudio"
+      other: "Otro"
+  name:
+    title: "¿Cómo te llamas?"
+    placeholder: "Nombre y apellido"
+  whatsapp:
+    title: "¿Cuál es tu WhatsApp?"
+    country: "País"
+    placeholder: "Número"
+  email:
+    title: "¿Y tu correo electrónico?"
+    placeholder: "nombre@estudio.com"
+  presence:
+    title: "Instagram profesional o web del estudio"
+    placeholder: "@estudio o estudio.com"
+  city:
+    title_studio: "¿En qué ciudad y país está el estudio?"
+    title_no_studio: "¿En qué ciudad y país trabajas?"
+    placeholder: "Ciudad, país"
+  revenue:
+    title: "¿Cuál es la facturación media mensual del estudio?"
+    currency: "Moneda"
+  challenge:
+    title: "¿Cuál es el mayor reto ahora mismo?"
+    options:
+      few: "Pocas solicitudes de presupuesto"
+      unqualified: "Solicitudes sin perfil"
+      closing: "Dificultad para cerrar contratos"
+      referrals: "Dependencia de recomendaciones"
+      other: "Otro"
+    other_placeholder: "¿Cuál?"
+  invest:
+    title: "¿Puedes invertir en el crecimiento del estudio en los próximos 90 días?"
+    options:
+      now: "Sí, quiero empezar ya"
+      soon: "Sí, en los próximos 30 días"
+
+done:
+  label: "Recibida"
+  title: "Solicitud recibida."
+  support: "El siguiente paso es una conversación rápida por WhatsApp."
+  button: "Hablar ahora por WhatsApp"
+  message: "Hola, soy {name}, de {studio}. Acabo de enviar la solicitud por la web."
+  back: "Volver a la web"
+
+external:
+  text: "La solicitud se abre en el formulario de Hub Performance."
+  link: "Abrir la solicitud"

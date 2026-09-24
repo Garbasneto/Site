@@ -4,8 +4,9 @@
   Primeiro quadro: papel, grelha, carimbo (com o H1) e botão já visíveis, sem animação de entrada.
   A planta é desenhada em Canvas por src/scripts/hero.ts a partir de src/data/plan.ts.
 */
+import { startHref } from '../../lib/form-mode';
 import Arrow from '../Arrow.astro';
-import { formatSheetDate, decimalSeparator, path, type Locale } from '../../i18n';
+import { formatSheetDate, decimalSeparator, type Locale } from '../../i18n';
 import type { Home } from '../../lib/content';
 
 interface Props {
@@ -79,7 +80,7 @@ const clientData = {
               </div>
             </dl>
           </div>
-          <a class="btn hero__cta" href={path('start', lang)} data-cta="hero" data-magnetic>
+          <a class="btn hero__cta" href={startHref(lang)} data-cta="hero" data-magnetic>
             <span class="hero__cta-label">{hero.cta}</span>
             <span class="btn__icon"><Arrow /></span>
           </a>

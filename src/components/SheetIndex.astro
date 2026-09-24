@@ -3,6 +3,7 @@
   Índice de folhas em tela cheia, como o índice de pranchas de um projeto.
   Número em mono, nome grande, fios da tabela que se desenham na abertura.
 */
+import { startHref } from '../lib/form-mode';
 import Arrow from './Arrow.astro';
 import { locales, path, type Locale } from '../i18n';
 import type { Home, NumberedSheet } from '../lib/content';
@@ -57,7 +58,7 @@ const { lang, content, nav, sheets } = Astro.props;
         ))
       }
     </ul>
-    <a class="btn btn--compact" href={path('start', lang)} data-cta="index">
+    <a class="btn btn--compact" href={startHref(lang)} data-cta="index">
       {nav.cta}
       <span class="btn__icon"><Arrow /></span>
     </a>

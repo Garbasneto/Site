@@ -1,0 +1,116 @@
+---
+/* Sugestão discreta de idioma (nunca redireciona). Comportamento em src/scripts/lang-suggest.ts. */
+import { locales, path, type Locale, type RouteKey } from '../i18n';
+
+interface Props {
+  lang: Locale;
+  route: RouteKey;
+  text: {
+    suggest: Record<Locale, string>;
+    switch: Record<Locale, string>;
+    dismiss: string;
+  };
+}
+
+const { lang, route, text } = Astro.props;
+---
+
+<div class="lsug" data-lang-suggest hidden>
+  {
+    locales
+      .filter((l) => l !== lang)
+      .map((l) => (
+        <p class="lsug__line" data-lang-option={l} lang={l} hidden>
+          <span>{text.suggest[l]}</span>
+          <a href={path(route, l)} hreflang={l} data-lang-link={l}>
+            {text.switch[l]}
+          </a>
+        </p>
+      ))
+  }
+  <button class="lsug__x" type="button" aria-label={text.dismiss} data-lang-dismiss>
+    <i></i><i></i>
+  </button>
+</div>
+
+<style>
+  .lsug {
+    position: fixed;
+    top: calc(var(--nav-h) + var(--s-2));
+    right: var(--margin);
+    left: var(--margin);
+    z-index: 69;
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    padding: var(--s-2) var(--s-2) var(--s-2) var(--s-4);
+    background: var(--paper);
+    color: var(--graphite);
+    border: 1px solid var(--line);
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: 0.04em;
+    transition:
+      opacity 0.3s linear,
+      transform var(--dur-1) var(--ease),
+      visibility 0s linear 0s;
+  }
+
+  .lsug:global(.is-away) {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition:
+      opacity 0.3s linear,
+      transform var(--dur-1) var(--ease),
+      visibility 0s linear 0.3s;
+  }
+
+  .lsug[hidden] {
+    display: none;
+  }
+
+  .lsug__line {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-1) var(--s-3);
+  }
+
+  .lsug__line[hidden] {
+    display: none;
+  }
+
+  .lsug__line a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .lsug__x {
+    position: relative;
+    flex: none;
+    width: 32px;
+    height: 32px;
+  }
+
+  .lsug__x i {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    width: 12px;
+    height: 1px;
+    background: currentColor;
+    transform: rotate(45deg);
+  }
+
+  .lsug__x i + i {
+    transform: rotate(-45deg);
+  }
+
+  @media (min-width: 768px) {
+    .lsug {
+      left: auto;
+      max-width: 420px;
+    }
+  }
+</style>

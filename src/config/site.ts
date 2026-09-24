@@ -43,9 +43,11 @@ export const site = {
     } as Record<string, string>,
   },
 
+  /** Áreas atendidas (entram no schema ProfessionalService) [PREENCHER]. Ex.: ['Portugal', 'Espanha', 'Brasil'] */
+  areasServed: [] as string[],
+
   form: {
-    /** 'native' usa o formulário do site; 'external' manda todos os botões para o Respondi. */
-    mode: (import.meta.env.FORM_MODE === 'external' ? 'external' : 'native') as 'native' | 'external',
+    /* O modo (native ou external) vem da variável FORM_MODE, na Vercel. */
     respondiUrl: '[PREENCHER: URL do formulário no Respondi]',
     /** Tempo mínimo (ms) entre abrir e enviar, contra robôs. */
     minFillMs: 4000,

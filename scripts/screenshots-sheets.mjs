@@ -29,6 +29,9 @@ const scrollTo = async (page, y, wait = 1400) => {
 
 for (const vp of viewports) {
   const context = await browser.newContext(vp.options);
+  // A nota de cookies tem capturas próprias; aqui a escolha já está feita (COOKIE_NOTE=1 mostra a nota).
+  if (!process.env.COOKIE_NOTE)
+    await context.addInitScript(() => localStorage.setItem('hp-consent', JSON.stringify({ v: 1, analytics: false, ads: false, t: Date.now() })));
   const page = await context.newPage();
   page.on('console', (m) => m.type() === 'error' && errors.push(`[${vp.name}] ${m.text()}`));
   page.on('pageerror', (e) => errors.push(`[${vp.name}] ${e.message}`));

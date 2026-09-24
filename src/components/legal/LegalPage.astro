@@ -1,0 +1,402 @@
+---
+/*
+  Páginas legais (Privacidade e Cookies) nos três idiomas.
+  O texto vem de src/content/legal/{pt,en,es}/*.md. Enquanto houver [PREENCHER], a página fica fora do Google.
+*/
+import Base from '../../layouts/Base.astro';
+import Header from '../Header.astro';
+import Wordmark from '../Wordmark.astro';
+import { getEntry, render } from 'astro:content';
+import { getHome } from '../../lib/content';
+import { formatSheetDate, path, type Locale } from '../../i18n';
+
+interface Props {
+  lang: Locale;
+  route: 'privacy' | 'cookies';
+}
+
+const { lang, route } = Astro.props;
+const slug = path(route, lang).split('/').pop();
+const entry = (await getEntry('legal', `${lang}/${slug}`))!;
+const { Content, headings } = await render(entry);
+const home = await getHome(lang);
+const common = (await getEntry('common', lang))!.data;
+const doc = entry.data;
+const pending = entry.body?.includes('[PREENCHER') ?? true;
+const sections = headings.filter((h) => h.depth === 2);
+const other = route === 'privacy' ? 'cookies' : 'privacy';
+const otherLabel = route === 'privacy' ? home.footer.cookies : home.footer.privacy;
+const code = route === 'privacy' ? 'L.01' : 'L.02';
+---
+
+<Base lang={lang} title={`${doc.title} · Hub Performance`} description={doc.description} route={route} noindex={pending}>
+  <Header lang={lang} nav={home.nav} route={route} index={false} solid />
+  <main id="conteudo" class="legal">
+    <div class="legal__sheet wrap grid">
+      <aside class="legal__meta">
+        <p class="label">{code} · {common.legal.label}</p>
+        <h1 class="legal__title">{doc.title}</h1>
+        <dl class="legal__fields">
+          <div>
+            <dt>{common.legal.updated}</dt>
+            <dd><time datetime={doc.updated}>{formatSheetDate(new Date(`${doc.updated}T12:00:00`), lang)}</time></dd>
+          </div>
+          {
+            pending && (
+              <div class="legal__draft">
+                <dt class="visually-hidden">{common.legal.label}</dt>
+                <dd>
+                  <span class="legal__dot" aria-hidden="true" />
+                  {common.legal.draft}
+                </dd>
+              </div>
+            )
+          }
+        </dl>
+        {
+          sections.length > 0 && (
+            <ol class="legal__toc">
+              {sections.map((h, i) => (
+                <li>
+                  <a href={`#${h.slug}`}>
+                    <span class="legal__toc-n">{String(i + 1).padStart(2, '0')}</span>
+                    {h.text}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          )
+        }
+        {
+          route === 'cookies' && (
+            <button class="btn btn--compact legal__prefs" type="button" data-cookie-open>
+              {common.cookies.reopen}
+            </button>
+          )
+        }
+      </aside>
+
+      <article class="legal__body prose">
+        <Content />
+      </article>
+    </div>
+
+    <footer class="legal__foot wrap">
+      <a href={path('home', lang)} aria-label="Hub Performance"><Wordmark /></a>
+      <a class="legal__link" href={path(other, lang)}>{otherLabel}</a>
+      <a class="legal__link" href={path('home', lang)}>{common.legal.back}</a>
+    </footer>
+  </main>
+</Base>
+
+<style>
+  .legal {
+    padding-top: calc(var(--nav-h) + var(--s-8));
+    background: var(--paper);
+  }
+
+  .legal__sheet {
+    row-gap: var(--s-7);
+    padding-bottom: var(--s-9);
+  }
+
+  .legal__meta,
+  .legal__body {
+    grid-column: 1 / -1;
+  }
+
+  .legal__title {
+    margin-top: var(--s-4);
+    font-size: var(--text-h2);
+    font-weight: var(--weight-regular);
+    line-height: var(--leading-display);
+    letter-spacing: var(--tracking-display);
+    text-wrap: balance;
+  }
+
+  .legal__fields {
+    margin-top: var(--s-6);
+    border-top: 1px solid var(--graphite);
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  .legal__fields > div {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--s-4);
+    padding-block: var(--s-3);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .legal__fields dt {
+    color: var(--concrete);
+  }
+
+  .legal__fields dd {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .legal__draft dd {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+  }
+
+  .legal__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--signal);
+  }
+
+  .legal__toc {
+    display: none;
+  }
+
+  .legal__prefs {
+    margin-top: var(--s-6);
+  }
+
+  .legal__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-3) var(--s-6);
+    padding-block: var(--s-6) calc(var(--s-6) + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid var(--line);
+  }
+
+  .legal__foot > a:first-child {
+    margin-right: auto;
+  }
+
+  .legal__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+  }
+
+  @media (min-width: 768px) {
+    .legal {
+      padding-top: calc(var(--nav-h) + var(--s-9));
+    }
+
+    .legal__sheet {
+      row-gap: var(--s-8);
+    }
+
+    .legal__meta {
+      grid-column: 1 / span 4;
+      align-self: start;
+      position: sticky;
+      top: calc(var(--nav-h) + var(--s-6));
+    }
+
+    .legal__body {
+      grid-column: 6 / span 7;
+    }
+
+    .legal__toc {
+      display: block;
+      margin-top: var(--s-7);
+      padding: 0;
+      list-style: none;
+    }
+
+    .legal__toc a {
+      display: flex;
+      gap: var(--s-3);
+      padding-block: 6px;
+      color: var(--concrete);
+      font-size: var(--text-small);
+      transition: color 0.2s linear;
+    }
+
+    .legal__toc a:hover {
+      color: var(--graphite);
+    }
+
+    .legal__toc-n {
+      font-family: var(--font-mono);
+      font-size: var(--text-label);
+      letter-spacing: var(--tracking-label);
+      line-height: inherit;
+      font-variant-numeric: tabular-nums;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .legal__body {
+      grid-column: 6 / span 6;
+    }
+  }
+
+  /* Texto corrido do documento (Markdown) */
+  .prose {
+    max-width: var(--measure);
+    font-size: var(--text-body);
+    line-height: 1.6;
+  }
+
+  .prose :global(h2) {
+    scroll-margin-top: calc(var(--nav-h) + var(--s-5));
+    margin-top: var(--s-8);
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--line);
+    font-size: var(--text-lead);
+    font-weight: var(--weight-medium);
+    line-height: 1.2;
+    letter-spacing: var(--tracking-title);
+  }
+
+  .prose :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .prose :global(p),
+  .prose :global(ul),
+  .prose :global(table) {
+    margin-top: var(--s-4);
+  }
+
+  .prose :global(ul) {
+    padding-left: 0;
+    list-style: none;
+  }
+
+  .prose :global(li) {
+    position: relative;
+    padding-left: var(--s-5);
+  }
+
+  .prose :global(li + li) {
+    margin-top: var(--s-2);
+  }
+
+  .prose :global(li::before) {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.8em;
+    width: 10px;
+    height: 1px;
+    background: var(--graphite);
+  }
+
+  .prose :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.92em;
+  }
+
+  .prose :global(strong) {
+    font-weight: var(--weight-medium);
+  }
+
+  .prose :global(a) {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+
+  /* Tabela de cookies: fios de 1 px; no celular, cada linha vira um bloco. */
+  .prose :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-small);
+    line-height: 1.45;
+  }
+
+  .prose :global(th) {
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    font-weight: var(--weight-regular);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    text-align: left;
+    color: var(--concrete);
+  }
+
+  .prose :global(th),
+  .prose :global(td) {
+    padding: var(--s-3) var(--s-3) var(--s-3) 0;
+    vertical-align: top;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .prose :global(thead th) {
+    border-bottom-color: var(--graphite);
+  }
+
+  .prose :global(td:nth-child(3)) {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+  }
+
+  @media (max-width: 767px) {
+    .prose :global(thead) {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+    }
+
+    .prose :global(table),
+    .prose :global(tbody),
+    .prose :global(tr),
+    .prose :global(td) {
+      display: block;
+    }
+
+    .prose :global(tr) {
+      padding-block: var(--s-4);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .prose :global(tr:first-child) {
+      border-top: 1px solid var(--graphite);
+    }
+
+    .prose :global(td) {
+      padding: 0;
+      border: 0;
+    }
+
+    .prose :global(td:first-child) {
+      font-family: var(--font-mono);
+      font-size: var(--text-label);
+      letter-spacing: var(--tracking-label);
+      text-transform: uppercase;
+      color: var(--concrete);
+    }
+
+    .prose :global(td:nth-child(2)) {
+      margin-top: var(--s-2);
+    }
+
+    .prose :global(td:nth-child(3)),
+    .prose :global(td:nth-child(4)) {
+      display: inline;
+    }
+
+    .prose :global(td:nth-child(3))::after {
+      content: ' · ';
+    }
+
+    .prose :global(td:nth-child(3))::before {
+      content: '';
+      display: block;
+      margin-top: var(--s-2);
+    }
+  }
+</style>

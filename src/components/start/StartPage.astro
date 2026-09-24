@@ -1,0 +1,945 @@
+---
+/*
+  Candidatura para diagnóstico: uma pergunta por tela, progresso como uma linha de cota.
+  Sem JavaScript, todas as perguntas aparecem em sequência e o envio funciona normalmente.
+  Comportamento em src/scripts/lead-form.ts; regras em src/lib/lead.ts; envio em src/pages/api/lead.ts.
+*/
+import { getEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Wordmark from '../Wordmark.astro';
+import Arrow from '../Arrow.astro';
+import { site } from '../../config/site';
+import { dialCodes, flag } from '../../data/countries';
+import { formMode } from '../../lib/form-mode';
+import { fill, getHome } from '../../lib/content';
+import { htmlLang, locales, path, type Locale } from '../../i18n';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const f = (await getEntry('form', lang))!.data;
+const home = await getHome(lang);
+const q = f.questions;
+
+const defaultCountry = ({ pt: 'PT', en: 'US', es: 'ES' } as const)[lang];
+const names = new Intl.DisplayNames([htmlLang[lang]], { type: 'region' });
+const countries = Object.keys(dialCodes)
+  .map((code) => ({ code, name: names.of(code) ?? code, dial: dialCodes[code] }))
+  .sort((a, b) => a.name.localeCompare(b.name, htmlLang[lang]));
+const defaultCurrency = lang === 'en' ? 'USD' : 'EUR';
+const currencies = [
+  { code: 'EUR', label: '€ EUR' },
+  { code: 'USD', label: 'US$ USD' },
+  { code: 'BRL', label: 'R$ BRL' },
+] as const;
+const letters = 'ABCDE';
+
+const config = {
+  lang,
+  errors: f.errors,
+  progress: f.progress,
+  message: f.done.message,
+  whatsapp: site.whatsapp,
+  defaultCountry,
+};
+
+type Opt = [string, string];
+const opts = (o: Record<string, string>): Opt[] => Object.entries(o);
+---
+
+<Base lang={lang} title={f.meta.title} description={f.meta.description} route="start" bodyClass="page-start sheet--dark" themeColor="#121211">
+  <header class="fhead wrap">
+    <a class="fhead__home" href={path('home', lang)} aria-label={home.nav.home}><Wordmark /></a>
+    <div class="fhead__right">
+      <ul class="fhead__lang" aria-label={home.nav.language}>
+        {
+          locales.map((l) => (
+            <li>
+              <a href={path('start', l)} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined} data-lang-link={l}>
+                {l.toUpperCase()}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a class="fhead__close" href={path('home', lang)}>
+        <span>{f.buttons.close}</span>
+        <span class="fhead__x" aria-hidden="true"><i></i><i></i></span>
+      </a>
+    </div>
+  </header>
+
+  <main id="conteudo" class="start">
+    {
+      formMode === 'external' ? (
+        <div class="start__external wrap">
+          <p class="label">{f.intro.label}</p>
+          <h1 class="lf__h1">{f.intro.title}</h1>
+          <p class="lf__support">{f.external.text}</p>
+          <a class="btn start__ext-btn" href={site.form.respondiUrl} data-cta="start-external">
+            <span>{f.external.link}</span>
+            <span class="btn__icon"><Arrow /></span>
+          </a>
+        </div>
+      ) : (
+        <div class="start__sheet wrap">
+          <div class="lfp" aria-hidden="true">
+            <span class="lfp__line">
+              <span class="lfp__fill" data-progress-fill />
+              {Array.from({ length: 11 }, (_, i) => (
+                <i style={`left:${i * 10}%`} />
+              ))}
+            </span>
+            <span class="lfp__count">
+              <span data-progress-current>01</span>/<span data-progress-total>10</span>
+            </span>
+          </div>
+          <p class="visually-hidden" aria-live="polite" data-progress-live />
+
+          <form class="lf" action="/api/lead" method="post" novalidate data-lead-form>
+            <input type="hidden" name="lang" value={lang} />
+            <input type="hidden" name="t0" value="" />
+            <div class="lf__hp" aria-hidden="true">
+              <label>
+                Website <input type="text" name="website" tabindex="-1" autocomplete="off" />
+              </label>
+            </div>
+
+            <p class="lf__nojs-error" id="erro" role="alert">{f.errors.generic}</p>
+
+            <div class="lf__intro" data-intro>
+              <p class="label">{f.intro.label}</p>
+              <h1 class="lf__h1">{f.intro.title}</h1>
+              <p class="lf__support">{f.intro.support}</p>
+            </div>
+
+            <fieldset class="lf__step is-current" data-step="has_studio">
+              <legend class="lf__q">
+                <span class="lf__n label">{f.step_label} <span data-step-n>01</span></span>
+                <span class="lf__mask"><span class="lf__title">{q.has_studio.title}</span></span>
+              </legend>
+              <div class="lf__choices" data-field>
+                {opts(q.has_studio.options).map(([v, l], i) => (
+                  <label class="lf__choice">
+                    <input type="radio" name="has_studio" value={v} />
+                    <span class="lf__key">{letters[i]}</span>
+                    <span>{l}</span>
+                  </label>
+                ))}
+              </div>
+              <p class="lf__error" data-error />
+            </fieldset>
+
+            <fieldset class="lf__step" data-step="role">
+              <legend class="lf__q">
+                <span class="lf__n label">{f.step_label} <span data-step-n>02</span></span>
+                <span class="lf__mask"><span class="lf__title">{q.role.title}</span></span>
+              </legend>
+              <div class="lf__choices" data-field>
+                {opts(q.role.options).map(([v, l], i) => (
+                  <label class="lf__choice">
+                    <input type="radio" name="role" value={v} />
+                    <span class="lf__key">{letters[i]}</span>
+                    <span>{l}</span>
+                  </label>
+                ))}
+              </div>
+              <p class="lf__error" data-error />
+            </fieldset>
+
+            <fieldset class="lf__step" data-step="name">
+              <legend class="lf__q" id="q-name">
+                <span class="lf__n label">{f.step_label} <span data-step-n>03</span></span>
+                <span class="lf__mask"><span class="lf__title">{q.name.title}</span></span>
+              </legend>
+              <div data-field>
+                <input class="lf__input" type="text" name="name" autocomplete="name" placeholder={q.name.placeholder} aria-labelledby="q-name" maxlength="120" />
+              </div>
+              <p class="lf__error" data-error />
+            </fieldset>
+
+            <fieldset class="lf__step" data-step="whatsapp">
+              <legend class="lf__q" id="q-whatsapp">
+                <span class="lf__n label">{f.step_label} <span data-step-n>04</span></span>
+                <span class="lf__mask"><span class="lf__title">{q.whatsapp.title}</span></span>
+              </legend>
+              <div class="lf__phone" data-field>
+                <label class="lf__country">
+                  <span class="visually-hidden">{q.whatsapp.country}</span>
+                  <span class="lf__country-face" aria-hidden="true">
+                    <span data-country-flag>{flag(defaultCountry)}</span>
+                    <span data-country-dial>+{dialCodes[defaultCountry]}</span>
+                    <span class="lf__caret" />
+                  </span>
+                  <select name="phone_country" data-country>
+                    {countries.map((c) => (
+                      <option value={c.code} selected={c.code === defaultCountry}>
+                        {flag(c.code)} {c.name} +{c.dial}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <input
+                  class="lf__input"
+                  type="tel"
+                  name="phone"
+                  inputmode="tel"
+                  autocomplete="tel-national"
+                  placeholder={q.whatsapp.placeholder}
+                  aria-labelledby="q-whatsapp"
+                  maxlength="24"
+                />
+              </div>
+              <p class="lf__error" data-error />
+            </fieldset>
+
+            <fieldset class="lf__step" data-step="email">
+              <legend class="lf__q" id="q-email">
+                <span class="lf__n label">{f.step_label} <span data-step-n>05</span></span>
+                <span class="lf__mask"><span class="lf__title">{q.email.title}</span></span>
+              </legend>
+              <div data-field>
+                <input class="lf__input" type="email" name="email" inputmode="email" autocomplete="email" placeholder={q.email.placeholder} aria-labelledby="q-email" maxlength="254" />
+              </div>
+              <p class="lf__error" data-error />
+            </fieldset>
+
+            <fieldset class="lf__step" data-step="presence">
+              <legend class="lf__q" id="q-presence">
+                <span class="lf__n label">{f.step_label} <span data-step-n>06</span></span>
+                <span class="lf__mask"><span class="lf__title">{q.presence.title}</span></span>
+              </legend>
+              <div data-field>
+                <input class="lf__input" type="text" name="presence" autocomplete="url" autocapitalize="off" placeholder={q.presence.placeholder} aria-labelledby="q-presence" maxlength="200" />
+              </div>
+              <p class="lf__error" data-error />
+            </fieldset>
+
+            <fieldset class="lf__step" data-step="city">
+              <legend class="lf__q" id="q-city">
+                <span class="lf__n label">{f.step_label} <span data-step-n>07</span></span>
+                <span class="lf__mask">
+                  <span class="lf__title" data-when-studio="yes">{q.city.title_studio}</span>
+                  <span class="lf__title" data-when-studio="no" hidden>{q.city.title_no_studio}</span>
+                </span>
+              </legend>
+              <div data-field>
+                <input class="lf__input" type="text" name="city" autocomplete="address-level2" placeholder={q.city.placeholder} aria-labelledby="q-city" maxlength="120" />
+              </div>
+              <p class="lf__error" data-error />
+            </fieldset>
+
+            <fieldset class="lf__step" data-step="revenue">
+              <legend class="lf__q">
+                <span class="lf__n label">{f.step_label} <span data-step-n>08</span></span>
+                <span class="lf__mask"><span class="lf__title">{q.revenue.title}</span></span>
+              </legend>
+              <div data-field>
+                <label class="lf__currency">
+                  <span class="label">{q.revenue.currency}</span>
+                  <select name="currency" data-currency>
+                    {currencies.map((c) => (
+                      <option value={c.code} selected={c.code === defaultCurrency}>
+                        {c.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                {currencies.map((c) => (
+                  <div class="lf__choices" data-bands={c.code} hidden={c.code !== defaultCurrency}>
+                    {site.revenueBands[c.code].map((b, i) => (
+                      <label class="lf__choice">
+                        <input type="radio" name="revenue" value={b.id} disabled={c.code !== defaultCurrency} />
+                        <span class="lf__key">{letters[i]}</span>
+                        <span>{b.label}</span>
+                      </label>
+                    ))}
+                  </div>
+                ))}
+              </div>
+              <p class="lf__error" data-error />
+            </fieldset>
+
+            <fieldset class="lf__step" data-step="challenge">
+              <legend class="lf__q">
+                <span class="lf__n label">{f.step_label} <span data-step-n>09</span></span>
+                <span class="lf__mask"><span class="lf__title">{q.challenge.title}</span></span>
+              </legend>
+              <div class="lf__choices" data-field>
+                {opts(q.challenge.options).map(([v, l], i) => (
+                  <label class="lf__choice">
+                    <input type="radio" name="challenge" value={v} />
+                    <span class="lf__key">{letters[i]}</span>
+                    <span>{l}</span>
+                  </label>
+                ))}
+                <input
+                  class="lf__input lf__other"
+                  type="text"
+                  name="challenge_other"
+                  placeholder={q.challenge.other_placeholder}
+                  aria-label={q.challenge.other_placeholder}
+                  maxlength="300"
+                  data-other
+                />
+              </div>
+              <p class="lf__error" data-error />
+            </fieldset>
+
+            <fieldset class="lf__step" data-step="invest">
+              <legend class="lf__q">
+                <span class="lf__n label">{f.step_label} <span data-step-n>10</span></span>
+                <span class="lf__mask"><span class="lf__title">{q.invest.title}</span></span>
+              </legend>
+              <div class="lf__choices" data-field>
+                {opts(q.invest.options).map(([v, l], i) => (
+                  <label class="lf__choice">
+                    <input type="radio" name="invest" value={v} />
+                    <span class="lf__key">{letters[i]}</span>
+                    <span>{l}</span>
+                  </label>
+                ))}
+              </div>
+              <p class="lf__error" data-error />
+            </fieldset>
+
+            <div class="lf__foot">
+              <button class="lf__back" type="button" data-back hidden>
+                {f.buttons.back}
+              </button>
+              <button class="btn lf__next" type="button" data-next>
+                <span>{f.buttons.next}</span>
+                <span class="btn__icon"><Arrow /></span>
+              </button>
+              <button class="btn lf__submit" type="submit" data-submit data-sending={f.buttons.sending}>
+                <span data-submit-label>{f.buttons.submit}</span>
+                <span class="btn__icon"><Arrow /></span>
+              </button>
+              <span class="lf__hint">{f.buttons.hint}</span>
+            </div>
+            <p class="lf__privacy" data-privacy>
+              {f.privacy.before}
+              <a href={path('privacy', lang)}>{f.privacy.link}</a>
+              {f.privacy.after}
+            </p>
+          </form>
+
+          <section class="lfd" id="recebida" data-done tabindex="-1" aria-labelledby="lfd-title">
+            <p class="label">{f.done.label}</p>
+            <h2 class="lfd__title" id="lfd-title">{f.done.title}</h2>
+            <p class="lf__support">{f.done.support}</p>
+            <a
+              class="btn lfd__btn"
+              href={`https://wa.me/?text=${encodeURIComponent(fill(f.done.message, { name: '', studio: '' }))}`}
+              target="_blank"
+              rel="noopener"
+              data-whatsapp="form_done"
+              data-wa-link
+            >
+              <span>{f.done.button}</span>
+              <span class="btn__icon"><Arrow /></span>
+            </a>
+            <a class="lfd__back label" href={path('home', lang)}>{f.done.back}</a>
+          </section>
+        </div>
+      )
+    }
+  </main>
+  <script type="application/json" data-form-config set:html={JSON.stringify(config)} />
+</Base>
+
+<script>
+  import '../../scripts/lead-form';
+</script>
+
+<style>
+  :global(html:has(body.page-start)) {
+    background: var(--graphite);
+  }
+
+  :global(body.page-start) {
+    background: var(--graphite);
+    color: var(--paper);
+  }
+
+  /* Cabeçalho mínimo */
+  .fhead {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: var(--nav-h);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .fhead__home {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .fhead__right {
+    display: flex;
+    align-items: center;
+    gap: var(--s-5);
+  }
+
+  .fhead__lang {
+    display: flex;
+    gap: var(--s-1);
+    list-style: none;
+    padding: 0;
+  }
+
+  .fhead__lang a,
+  .fhead__close {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    min-height: 44px;
+    padding-inline: 4px;
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .fhead__lang a[aria-current='true'],
+  .fhead__close {
+    color: var(--paper);
+  }
+
+  .fhead__lang a[aria-current='true'] {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .fhead__x {
+    position: relative;
+    width: 12px;
+    height: 12px;
+  }
+
+  .fhead__x i {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    transform: rotate(45deg);
+  }
+
+  .fhead__x i + i {
+    transform: rotate(-45deg);
+  }
+
+  @media (max-width: 767px) {
+    .fhead__close span:first-child {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+    }
+  }
+
+  /* A folha: recebe o botão do hero pela View Transition */
+  .start {
+    min-height: calc(100svh - var(--nav-h));
+    view-transition-name: cta-sheet;
+  }
+
+  .start__sheet,
+  .start__external {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100svh - var(--nav-h));
+    padding-top: var(--s-5);
+    padding-bottom: calc(var(--s-6) + env(safe-area-inset-bottom, 0px));
+  }
+
+  .start__external {
+    justify-content: center;
+    gap: var(--s-4);
+  }
+
+  .start__ext-btn {
+    align-self: flex-start;
+    margin-top: var(--s-4);
+    background: var(--paper);
+    color: var(--graphite);
+  }
+
+  /* Progresso: uma linha de cota que se preenche */
+  .lfp {
+    display: none;
+  }
+
+  :global(.js) .lfp {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+  }
+
+  .lfp__line {
+    position: relative;
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  .lfp__line i {
+    position: absolute;
+    top: -4px;
+    width: 1px;
+    height: 9px;
+    background: var(--stone);
+  }
+
+  .lfp__fill {
+    position: absolute;
+    left: 0;
+    top: -1px;
+    width: 100%;
+    height: 3px;
+    background: var(--signal);
+    transform-origin: left center;
+    transform: scaleX(0);
+    transition: transform var(--dur-2) var(--ease);
+  }
+
+  .lfp__count {
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-label);
+    min-width: 5ch;
+    text-align: right;
+  }
+
+  /* Formulário */
+  .lf {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    max-width: 760px;
+    width: 100%;
+    margin-top: var(--s-7);
+  }
+
+  .lf__hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .lf__intro {
+    margin-bottom: var(--s-7);
+  }
+
+  .lf__h1 {
+    margin-top: var(--s-3);
+    font-size: clamp(2rem, 1.2rem + 3.2vw, 4rem);
+    font-weight: var(--weight-regular);
+    line-height: var(--leading-display);
+    letter-spacing: var(--tracking-display);
+    max-width: 14ch;
+  }
+
+  .lf__support {
+    margin-top: var(--s-4);
+    max-width: 44ch;
+    font-size: var(--text-lead);
+    line-height: 1.45;
+    color: var(--stone);
+  }
+
+  :global(.js) .lf__intro:global(.is-compact) {
+    display: none;
+  }
+
+  .lf__step {
+    margin: 0 0 var(--s-8);
+    padding: 0;
+    border: 0;
+    min-width: 0;
+  }
+
+  :global(.js) .lf__step:not(:global(.is-current)) {
+    display: none;
+  }
+
+  :global(.js) .lf__step {
+    margin-bottom: 0;
+  }
+
+  .lf__q {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-3);
+    padding: 0;
+    margin-bottom: var(--s-6);
+  }
+
+  .lf__n {
+    color: var(--stone);
+  }
+
+  .lf__mask {
+    display: block;
+    overflow: clip;
+    padding-bottom: 0.12em;
+    margin-bottom: -0.12em;
+  }
+
+  .lf__title {
+    display: block;
+    font-size: clamp(1.75rem, 1.1rem + 2.6vw, 3.25rem);
+    line-height: 1.06;
+    letter-spacing: -0.032em;
+    max-width: 22ch;
+    text-wrap: balance;
+  }
+
+  .lf__title[hidden] {
+    display: none;
+  }
+
+  .lf__input {
+    width: 100%;
+    padding: var(--s-3) 0;
+    border: 0;
+    border-bottom: 1px solid var(--stone);
+    border-radius: 0;
+    background: transparent;
+    color: var(--paper);
+    font: inherit;
+    font-size: clamp(1.25rem, 1rem + 1vw, 1.875rem);
+    letter-spacing: -0.015em;
+    caret-color: var(--signal);
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .lf__input::placeholder {
+    color: var(--stone);
+    opacity: 0.6;
+  }
+
+  .lf__input:focus {
+    outline: none;
+    border-bottom-color: var(--paper);
+  }
+
+  .lf__input:focus-visible {
+    outline: none;
+    box-shadow: 0 1px 0 0 var(--paper);
+  }
+
+  .lf__input[aria-invalid='true'] {
+    border-bottom-color: var(--signal);
+  }
+
+  .lf__choices {
+    border-top: 1px solid var(--rule);
+  }
+
+  .lf__choices[hidden] {
+    display: none;
+  }
+
+  .lf__choice {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+    min-height: 60px;
+    padding: var(--s-3) 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: var(--text-lead);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .lf__choice input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+  }
+
+  .lf__key {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--stone);
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    color: var(--stone);
+    transition:
+      background-color 0.2s linear,
+      color 0.2s linear,
+      border-color 0.2s linear;
+  }
+
+  .lf__choice:has(input:checked) .lf__key {
+    background: var(--signal);
+    border-color: var(--signal);
+    color: var(--graphite);
+  }
+
+  .lf__choice:has(input:focus-visible) {
+    outline: 2px solid var(--paper);
+    outline-offset: 2px;
+  }
+
+  @media (hover: hover) {
+    .lf__choice:hover .lf__key {
+      border-color: var(--paper);
+      color: var(--paper);
+    }
+  }
+
+  .lf__other {
+    margin-top: var(--s-4);
+  }
+
+  :global(.js) .lf__other:not(:global(.is-visible)) {
+    display: none;
+  }
+
+  .lf__phone {
+    display: flex;
+    align-items: stretch;
+    gap: var(--s-4);
+  }
+
+  .lf__country {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: none;
+    border-bottom: 1px solid var(--stone);
+  }
+
+  .lf__country-face {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    padding: var(--s-3) var(--s-1);
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    pointer-events: none;
+  }
+
+  .lf__caret {
+    width: 7px;
+    height: 7px;
+    margin-left: var(--s-1);
+    border-right: 1px solid currentColor;
+    border-bottom: 1px solid currentColor;
+    transform: translateY(-2px) rotate(45deg);
+  }
+
+  .lf__country select {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    opacity: 0;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .lf__country:focus-within {
+    outline: 2px solid var(--paper);
+    outline-offset: 4px;
+  }
+
+  .lf__currency {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    margin-bottom: var(--s-4);
+  }
+
+  .lf__currency select {
+    min-height: 40px;
+    padding: 0 var(--s-3);
+    border: 1px solid var(--stone);
+    border-radius: 0;
+    background: transparent;
+    color: var(--paper);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+  }
+
+  .lf__currency select option {
+    color: var(--graphite);
+  }
+
+  .lf__error {
+    min-height: 1.5em;
+    margin-top: var(--s-3);
+    font-size: 0.9375rem;
+  }
+
+  .lf__error:not(:empty)::before {
+    content: '';
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: var(--s-2);
+    background: var(--signal);
+    vertical-align: 0.1em;
+  }
+
+  .lf__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-4);
+    margin-top: var(--s-6);
+  }
+
+  .lf__next,
+  .lf__submit,
+  .lfd__btn {
+    background: var(--paper);
+    color: var(--graphite);
+    min-width: 220px;
+  }
+
+  :global(html:not(.js)) .lf__next,
+  :global(html:not(.js)) .lf__back {
+    display: none;
+  }
+
+  :global(.js) .lf__submit:not(:global(.is-visible)),
+  :global(.js) .lf__next:global(.is-hidden) {
+    display: none;
+  }
+
+  .lf__submit[aria-busy='true'] {
+    opacity: 0.6;
+  }
+
+  .lf__back {
+    min-height: 44px;
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .lf__back[hidden] {
+    display: none;
+  }
+
+  .lf__hint {
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: 0.04em;
+    color: var(--stone);
+  }
+
+  @media (hover: none) {
+    .lf__hint {
+      display: none;
+    }
+  }
+
+  .lf__privacy {
+    margin-top: var(--s-5);
+    font-size: 0.8125rem;
+    color: var(--stone);
+  }
+
+  .lf__privacy a {
+    color: var(--paper);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  :global(.js) .lf__privacy:not(:global(.is-visible)) {
+    visibility: hidden;
+  }
+
+  /* Sem JavaScript: aviso quando o servidor devolve a página com #erro */
+  .lf__nojs-error {
+    display: none;
+    padding: var(--s-3) var(--s-4);
+    border: 1px solid var(--signal);
+    font-size: var(--text-small);
+  }
+
+  .lf__nojs-error:target {
+    display: block;
+  }
+
+  :global(.js) .lf__nojs-error {
+    display: none;
+  }
+
+  /* Tela final */
+  .lfd {
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    flex: 1;
+    gap: var(--s-4);
+    max-width: 760px;
+  }
+
+  .lfd:target,
+  .lfd:global(.is-visible) {
+    display: flex;
+  }
+
+  .start__sheet:has(.lfd:target) .lf,
+  .start__sheet:has(.lfd:global(.is-visible)) .lf,
+  .start__sheet:has(.lfd:global(.is-visible)) .lfp {
+    display: none;
+  }
+
+  .lfd__title {
+    font-size: clamp(2.25rem, 1.3rem + 3.6vw, 4.5rem);
+    font-weight: var(--weight-regular);
+    line-height: var(--leading-display);
+    letter-spacing: var(--tracking-display);
+  }
+
+  .lfd__btn {
+    margin-top: var(--s-4);
+    min-height: 60px;
+  }
+
+  .lfd__back {
+    margin-top: var(--s-5);
+    color: var(--stone);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  @media (min-width: 768px) {
+    .lf {
+      width: auto;
+      margin-top: var(--s-9);
+      margin-left: calc((100% - var(--gutter) * 11) / 12 * 3 + var(--gutter) * 3);
+    }
+
+    .lfd {
+      margin-left: calc((100% - var(--gutter) * 11) / 12 * 3 + var(--gutter) * 3);
+    }
+  }
+</style>

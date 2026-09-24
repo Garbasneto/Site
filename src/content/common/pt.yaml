@@ -1,0 +1,33 @@
+# Textos compartilhados (português).
+cookies:
+  label: "Nota · Cookies"
+  text: "Usamos cookies para medir campanhas e melhorar o site. Os de análise e publicidade só com o seu consentimento."
+  more: "Política de cookies"
+  accept: "Aceitar"
+  reject: "Recusar"
+  prefs: "Preferências"
+  save: "Guardar escolha"
+  necessary: "Necessários (sempre ativos)"
+  analytics: "Análise"
+  ads: "Publicidade"
+  reopen: "Preferências de cookies"
+
+# Sugestão discreta de idioma (nunca redireciona). Cada frase no próprio idioma.
+language:
+  suggest:
+    pt: "Esta página também está em português."
+    en: "This page is also available in English."
+    es: "Esta página también está en español."
+  switch:
+    pt: "Ver em português"
+    en: "View in English"
+    es: "Ver en español"
+  dismiss: "Fechar"
+
+legal:
+  label: "Documento"
+  draft: "Rascunho · revisão jurídica pendente"
+  updated: "Atualização"
+  back: "Voltar à planta"
+
+og_alt: "Planta baixa com as etapas do processo comercial e o carimbo da Hub Performance."

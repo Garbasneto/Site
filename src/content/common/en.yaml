@@ -1,0 +1,31 @@
+cookies:
+  label: "Note · Cookies"
+  text: "We use cookies to measure campaigns and improve the site. Analytics and advertising cookies only with your consent."
+  more: "Cookie policy"
+  accept: "Accept"
+  reject: "Decline"
+  prefs: "Preferences"
+  save: "Save choice"
+  necessary: "Necessary (always on)"
+  analytics: "Analytics"
+  ads: "Advertising"
+  reopen: "Cookie preferences"
+
+language:
+  suggest:
+    pt: "Esta página também está em português."
+    en: "This page is also available in English."
+    es: "Esta página también está en español."
+  switch:
+    pt: "Ver em português"
+    en: "View in English"
+    es: "Ver en español"
+  dismiss: "Close"
+
+legal:
+  label: "Document"
+  draft: "Draft · pending legal review"
+  updated: "Updated"
+  back: "Back to the floor plan"
+
+og_alt: "Floor plan showing the stages of the sales process and the Hub Performance title block."
