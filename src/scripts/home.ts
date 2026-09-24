@@ -17,6 +17,10 @@ async function boot() {
   setupScroll?.();
   await yieldToMain();
   initNav();
+  // As folhas seguintes chegam num pedaço separado de JavaScript.
+  const { initSections } = await import('./sections');
+  await yieldToMain();
+  initSections();
 }
 
 boot();

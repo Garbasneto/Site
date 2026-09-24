@@ -1,0 +1,82 @@
+---
+import Sheet from '../Sheet.astro';
+import Row from '../Row.astro';
+import ServiceDrawing from '../ServiceDrawing.astro';
+import type { Home, NumberedSheet } from '../../lib/content';
+
+interface Props {
+  content: Home['services'];
+  sheet: NumberedSheet;
+  prefix: string;
+  total: string;
+}
+
+const { content, sheet, prefix, total } = Astro.props;
+---
+
+<Sheet id={sheet.id} prefix={prefix} number={sheet.number} total={total} label={sheet.label} title={content.title} lead={content.lead}>
+  <div class="services wrap" data-rows>
+    {
+      content.items.map((item) => (
+        <Row id={`servico-${item.number}`} number={item.number} title={item.name} summary={item.summary}>
+          <div class="services__deliverables">
+            <p class="label">{content.deliverables_label}</p>
+            <ul>
+              {item.deliverables.map((d) => (
+                <li data-reveal-item>{d}</li>
+              ))}
+            </ul>
+          </div>
+          <div class="services__drawing">
+            <ServiceDrawing type={item.drawing} />
+          </div>
+        </Row>
+      ))
+    }
+  </div>
+</Sheet>
+
+<style>
+  .services {
+    border-top: 1px solid var(--rule);
+  }
+
+  .services__deliverables {
+    grid-column: 1 / -1;
+  }
+
+  .services__deliverables ul {
+    margin-top: var(--s-3);
+    padding: 0;
+    list-style: none;
+  }
+
+  .services__deliverables li {
+    padding: var(--s-2) 0;
+    border-top: 1px solid var(--rule);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    letter-spacing: 0.01em;
+  }
+
+  .services__deliverables li:last-child {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .services__drawing {
+    grid-column: 1 / -1;
+    color: var(--fg);
+  }
+
+  @media (min-width: 768px) {
+    .services__deliverables {
+      grid-column: 2 / 7;
+    }
+
+    .services__drawing {
+      grid-column: 7 / 11;
+      padding-top: var(--s-6);
+    }
+  }
+</style>

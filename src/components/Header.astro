@@ -79,6 +79,30 @@ const { lang, nav, route = 'home' } = Astro.props;
     transform: none;
   }
 
+  /* Sobre as folhas escuras */
+  :global(html.on-dark) .nav {
+    color: var(--paper);
+  }
+
+  :global(html.on-dark) .nav:global(.is-solid) {
+    background: var(--graphite);
+    border-bottom-color: var(--line-on-dark);
+  }
+
+  :global(html.on-dark) .nav__lang a {
+    color: var(--stone);
+  }
+
+  :global(html.on-dark) .nav__lang a[aria-current='true'],
+  :global(html.on-dark) .nav__index {
+    color: var(--paper);
+  }
+
+  :global(html.on-dark) .nav__cta {
+    background: var(--paper);
+    color: var(--graphite);
+  }
+
   .nav__home {
     display: inline-flex;
     align-items: center;

@@ -8,6 +8,7 @@
 
 import { readFile, readdir } from 'node:fs/promises';
 import { join, extname } from 'node:path';
+import yaml from 'js-yaml';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 
@@ -94,22 +95,40 @@ function langOf(file) {
 const problems = [];
 const files = (await walk(join(ROOT, 'src'))).filter((f) => ['.yaml', '.yml', '.md', '.mdx', '.json', '.astro', '.ts'].includes(extname(f)));
 
+function checkText(text, lang, where) {
+  if (FAKE_DASH.test(text)) problems.push(`${where}  hífen fazendo papel de travessão: "${text.slice(0, 60)}"`);
+  for (const re of banned[lang] ?? []) {
+    if (re.test(text)) problems.push(`${where}  palavra proibida (${re.source.replace(/^.*\?:(.*)\)\(\?!.*$/, '$1')}): "${text.slice(0, 60)}"`);
+  }
+}
+
+/** Percorre o YAML: o idioma vem do nome do arquivo ou de uma chave pt/en/es no caminho. */
+function walkData(node, lang, path, file) {
+  if (typeof node === 'string') {
+    if (lang) checkText(node, lang, `${file} > ${path.join('.')}`);
+  } else if (Array.isArray(node)) {
+    node.forEach((v, i) => walkData(v, lang, [...path, i], file));
+  } else if (node && typeof node === 'object') {
+    for (const [k, v] of Object.entries(node)) {
+      walkData(v, ['pt', 'en', 'es'].includes(k) ? k : lang, [...path, k], file);
+    }
+  }
+}
+
 for (const file of files) {
   const rel = file.replace(ROOT, '');
-  const lines = (await readFile(file, 'utf8')).split('\n');
-  const isContent = rel.startsWith('src/content/');
-  const lang = isContent ? langOf(rel) : null;
-  lines.forEach((line, i) => {
-    const where = `${rel}:${i + 1}`;
-    if (DASHES.test(line)) problems.push(`${where}  travessão ou meia-risca`);
-    if (!isContent) return;
-    // Só o texto entre aspas conta (ignora chaves do YAML e comentários).
-    const text = line.trim().startsWith('#') ? '' : line.replace(/^\s*-\s+/, '').replace(/^[^:"]*:\s*/, '');
-    if (FAKE_DASH.test(text)) problems.push(`${where}  hífen fazendo papel de travessão`);
-    for (const re of banned[lang] ?? []) {
-      if (re.test(text)) problems.push(`${where}  palavra proibida (${re.source})`);
-    }
+  const raw = await readFile(file, 'utf8');
+  raw.split('\n').forEach((line, i) => {
+    if (DASHES.test(line)) problems.push(`${rel}:${i + 1}  travessão ou meia-risca`);
   });
+  if (!rel.startsWith('src/content/')) continue;
+  const ext = extname(file);
+  if (ext === '.yaml' || ext === '.yml') {
+    walkData(yaml.load(raw), langOf(rel), [], rel);
+  } else if (ext === '.md' || ext === '.mdx') {
+    const lang = langOf(rel);
+    raw.split('\n').forEach((line, i) => lang && checkText(line.replace(/^\s*[-*]\s+/, ''), lang, `${rel}:${i + 1}`));
+  }
 }
 
 if (problems.length) {

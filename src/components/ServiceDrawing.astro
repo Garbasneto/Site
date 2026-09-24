@@ -1,0 +1,111 @@
+---
+/*
+  Pequenos desenhos técnicos das frentes de serviço, em traço. Desenham-se ao abrir a linha.
+  Convenções de desenho de arquitetura; o ponto na cor sinal é o que "vai ser construído".
+*/
+interface Props {
+  type: 'strategy' | 'ads' | 'funnel' | 'crm' | 'seo' | 'data';
+}
+
+const { type } = Astro.props;
+---
+
+<svg class="drawing" viewBox="0 0 240 140" fill="none" aria-hidden="true" focusable="false" data-drawing>
+  {
+    type === 'strategy' && (
+      <g>
+        {/* Implantação: eixos cotados e o ponto-alvo (cliente, oferta, preço) */}
+        <path d="M24 118H222M34 128V14" />
+        <path d="M24 118v6M64 118v6M104 118v6M144 118v6M184 118v6M28 88h6M28 58h6M28 28h6" />
+        <path d="M34 50H150V118" class="thin" />
+        <path d="M150 38v24M138 50h24" />
+        <circle cx="150" cy="50" r="12" />
+        <circle cx="150" cy="50" r="3" class="dot" />
+      </g>
+    )
+  }
+  {
+    type === 'ads' && (
+      <g>
+        {/* Linhas de visada convergindo para um vão de porta */}
+        <path d="M168 12V56M176 12V56M168 84V128M176 84V128M168 12h8M168 128h8M168 56h8M168 84h8" />
+        <path d="M18 18L168 62M18 44L168 66M18 70L168 70M18 96L168 74M18 122L168 78" class="thin" />
+        <path d="M176 84a28 28 0 0 1 28-28V84z" class="thin" />
+        <circle cx="212" cy="70" r="3" class="dot" />
+      </g>
+    )
+  }
+  {
+    type === 'funnel' && (
+      <g>
+        {/* Corredor que se estreita até uma porta: filtra antes da conversa */}
+        <path d="M14 14L128 54H172M14 126L128 86H172" />
+        <path d="M22 14L136 54M22 126L136 86" class="thin" />
+        <path d="M172 54V40M172 86V100M172 54a32 32 0 0 1 32 32" class="thin" />
+        <path d="M50 42v56M86 54v32" class="thin" />
+        <circle cx="214" cy="70" r="3" class="dot" />
+      </g>
+    )
+  }
+  {
+    type === 'crm' && (
+      <g>
+        {/* Escada em planta: cada degrau, uma etapa com dono e prazo */}
+        <path d="M20 28H220V112H20z" />
+        <path d="M48 28V112M76 28V112M104 28V112M132 28V112M160 28V112M188 28V112" class="thin" />
+        <path d="M20 70H206M198 64l8 6-8 6" />
+        <circle cx="34" cy="70" r="3" class="dot" />
+      </g>
+    )
+  }
+  {
+    type === 'seo' && (
+      <g>
+        {/* Planta de situação: quarteirões e o ponto de referência na cidade */}
+        <path d="M14 14H74V54H14zM90 14H150V54H90zM166 14H226V54H166zM14 86H74V126H14zM166 86H226V126H166z" class="thin" />
+        <path d="M90 86H150V126H90z" />
+        <path d="M120 60V80M110 70h20" />
+        <circle cx="120" cy="70" r="14" />
+        <circle cx="120" cy="70" r="3" class="dot" />
+      </g>
+    )
+  }
+  {
+    type === 'data' && (
+      <g>
+        {/* Corte com cotas de nível: cada contrato com origem medida */}
+        <path d="M14 124H226" />
+        <path d="M24 124V104H70V84H116V64H162V44H208V24" />
+        <path d="M70 84l-6-8h12zM116 64l-6-8h12zM162 44l-6-8h12z" class="thin" />
+        <path d="M24 104H14M70 84H14M116 64H14M162 44H14" class="thin" />
+        <circle cx="208" cy="24" r="3" class="dot" />
+      </g>
+    )
+  }
+</svg>
+
+<style>
+  .drawing {
+    width: 100%;
+    max-width: min(280px, 72vw);
+    height: auto;
+    overflow: visible;
+  }
+
+  .drawing :global(path),
+  .drawing :global(circle) {
+    stroke: currentColor;
+    stroke-width: 1;
+    stroke-linecap: square;
+  }
+
+  .drawing :global(.thin) {
+    stroke-width: 0.75;
+    opacity: 0.6;
+  }
+
+  .drawing :global(.dot) {
+    fill: var(--signal);
+    stroke: none;
+  }
+</style>

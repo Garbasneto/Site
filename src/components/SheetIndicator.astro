@@ -1,0 +1,57 @@
+---
+/* Indicador fixo da folha atual, no canto inferior esquerdo (só desktop): "F.03/08 · MÉTODO". */
+interface Props {
+  initial: string;
+}
+
+const { initial } = Astro.props;
+---
+
+<div class="sind" aria-hidden="true" data-sheet-indicator>
+  <span class="sind__mask"><span class="sind__text" data-sheet-indicator-text>{initial}</span></span>
+</div>
+
+<style>
+  .sind {
+    display: none;
+  }
+
+  @media (min-width: 768px) and (hover: hover) {
+    .sind {
+      display: block;
+      position: fixed;
+      left: var(--margin);
+      bottom: var(--s-5);
+      z-index: calc(var(--z-nav) - 1);
+      font-family: var(--font-mono);
+      font-size: var(--text-label);
+      letter-spacing: var(--tracking-label);
+      text-transform: uppercase;
+      color: var(--graphite);
+      background: var(--paper);
+      padding: 4px 8px;
+      margin-left: -8px;
+      opacity: 0;
+      transition: opacity 0.4s linear, color 0.3s linear;
+      pointer-events: none;
+    }
+
+    .sind:global(.is-visible) {
+      opacity: 1;
+    }
+
+    :global(html.on-dark) .sind {
+      color: var(--paper);
+      background: var(--graphite);
+    }
+  }
+
+  .sind__mask {
+    display: block;
+    overflow: clip;
+  }
+
+  .sind__text {
+    display: block;
+  }
+</style>

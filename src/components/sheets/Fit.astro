@@ -1,0 +1,273 @@
+---
+/*
+  F.06 · Para quem é. Duas colunas separadas por um fio.
+  Marcadores de reforma: quadrado na cor sinal (a construir) e quadrado riscado (a demolir).
+  Abaixo, o responsável técnico.
+*/
+import { Picture } from 'astro:assets';
+import Sheet from '../Sheet.astro';
+import { isPlaceholder, type Home, type NumberedSheet } from '../../lib/content';
+import { site } from '../../config/site';
+
+interface Props {
+  content: Home['fit'];
+  sheet: NumberedSheet;
+  prefix: string;
+  total: string;
+}
+
+const { content, sheet, prefix, total } = Astro.props;
+
+// Foto do fundador: salvar em src/assets/fundador.jpg (ou .png/.webp). Aparece em preto e branco.
+const photos = import.meta.glob<{ default: ImageMetadata }>('../../assets/fundador.{jpg,jpeg,png,webp}', { eager: true });
+const photo = Object.values(photos)[0]?.default;
+const instagram = site.founder.instagram;
+---
+
+<Sheet id={sheet.id} prefix={prefix} number={sheet.number} total={total} label={sheet.label} title={content.title}>
+  <div class="fit wrap grid">
+    <div class="fit__col">
+      <h3 class="fit__title">{content.yes_title}</h3>
+      <ul>
+        {
+          content.yes.map((t) => (
+            <li data-reveal-item>
+              <span class="fit__mark fit__mark--yes" aria-hidden="true" />
+              <span>{t}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <div class="fit__col fit__col--no">
+      <h3 class="fit__title">{content.no_title}</h3>
+      <ul>
+        {
+          content.no.map((t) => (
+            <li data-reveal-item>
+              <svg class="fit__mark fit__mark--no" viewBox="0 0 9 9" aria-hidden="true">
+                <path d="M0.5 0.5h8v8h-8zM0.5 0.5l8 8M8.5 0.5l-8 8" />
+              </svg>
+              <span>{t}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+
+  <div class="lead wrap grid">
+    <p class="lead__label label" data-reveal="fade">{content.lead_label}</p>
+    <div class="lead__photo">
+      {
+        photo ? (
+          <Picture src={photo} alt={`${content.lead_name}, ${content.lead_role}`} widths={[360, 720]} sizes="(min-width: 768px) 25vw, 60vw" formats={['avif', 'webp']} loading="lazy" />
+        ) : (
+          <div class="lead__ph" role="img" aria-label={content.photo_placeholder}>
+            <svg viewBox="0 0 100 125" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M0 0L100 125M100 0L0 125" />
+            </svg>
+            <span>{content.photo_placeholder}</span>
+          </div>
+        )
+      }
+    </div>
+    <div class="lead__text">
+      <p class="lead__name">
+        {content.lead_name}, {content.lead_role}
+      </p>
+      <p class="lead__statement">{content.lead_text}</p>
+      <p class="lead__bio">{content.lead_bio}</p>
+      {
+        isPlaceholder(instagram) ? (
+          <p class="lead__link label">{instagram}</p>
+        ) : (
+          <a class="lead__link label" href={instagram} rel="noopener" target="_blank">
+            {content.lead_link}
+          </a>
+        )
+      }
+    </div>
+  </div>
+</Sheet>
+
+<style>
+  .fit {
+    row-gap: var(--s-7);
+  }
+
+  .fit__col {
+    grid-column: 1 / -1;
+  }
+
+  .fit__title {
+    padding-bottom: var(--s-4);
+    font-size: var(--text-h3);
+    font-weight: var(--weight-regular);
+    letter-spacing: var(--tracking-title);
+  }
+
+  .fit ul {
+    list-style: none;
+    padding: 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .fit li {
+    display: grid;
+    grid-template-columns: 1.75rem minmax(0, 1fr);
+    padding: var(--s-4) 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: var(--text-lead);
+    line-height: 1.4;
+  }
+
+  .fit__mark {
+    position: relative;
+    width: 9px;
+    height: 9px;
+    margin-top: 0.5em;
+  }
+
+  .fit__mark--yes {
+    background: var(--signal);
+  }
+
+  .fit__mark--no {
+    overflow: visible;
+  }
+
+  .fit__mark--no path {
+    fill: none;
+    stroke: var(--fg);
+    stroke-width: 1;
+  }
+
+  .fit__col--no li > span:last-child {
+    color: var(--fg-muted);
+  }
+
+  /* Responsável técnico */
+  .lead {
+    margin-top: var(--s-9);
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--rule);
+    row-gap: var(--s-5);
+  }
+
+  .lead__label {
+    grid-column: 1 / -1;
+  }
+
+  .lead__photo {
+    grid-column: 1 / 4;
+  }
+
+  .lead__photo :global(img) {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    filter: grayscale(1);
+  }
+
+  .lead__ph {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    border: 1px solid var(--fg);
+    display: flex;
+    align-items: flex-end;
+    padding: var(--s-3);
+  }
+
+  .lead__ph svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .lead__ph path {
+    stroke: var(--rule);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+    fill: none;
+  }
+
+  .lead__ph span {
+    position: relative;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.04em;
+    color: var(--fg-muted);
+    background: var(--bg);
+  }
+
+  .lead__text {
+    grid-column: 1 / -1;
+  }
+
+  .lead__name {
+    font-size: var(--text-h3);
+    line-height: 1.12;
+    letter-spacing: var(--tracking-title);
+    max-width: 22ch;
+  }
+
+  .lead__statement {
+    margin-top: var(--s-5);
+    font-size: var(--text-lead);
+    max-width: 40ch;
+  }
+
+  .lead__bio {
+    margin-top: var(--s-4);
+    max-width: var(--measure);
+    color: var(--fg-muted);
+  }
+
+  .lead__link {
+    display: inline-block;
+    margin-top: var(--s-5);
+    color: var(--fg);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  @media (min-width: 768px) {
+    .fit {
+      position: relative;
+    }
+
+    .fit__col {
+      grid-column: 1 / 7;
+      padding-right: var(--s-6);
+    }
+
+    .fit__col--no {
+      grid-column: 7 / 13;
+      padding-right: 0;
+      padding-left: var(--s-6);
+      border-left: 1px solid var(--rule);
+    }
+
+    .lead {
+      margin-top: var(--s-10);
+    }
+
+    .lead__label {
+      grid-column: 1 / 4;
+    }
+
+    .lead__photo {
+      grid-column: 4 / 7;
+      grid-row: 1 / span 2;
+    }
+
+    .lead__text {
+      grid-column: 8 / 13;
+      grid-row: 1 / span 2;
+      align-self: end;
+    }
+  }
+</style>

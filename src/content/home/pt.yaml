@@ -26,6 +26,14 @@ sheets:
   - { id: perguntas, label: "Perguntas", title: "Perguntas frequentes" }
   - { id: iniciar, label: "Iniciar", title: "Iniciar projeto" }
 
+index:
+  title: "Índice de folhas"
+  close: "Fechar"
+
+# Marca d'água dos cases e depoimentos não publicados (só aparece em desenvolvimento).
+drafts:
+  watermark: "Exemplo"
+
 hero:
   plan_description: "Planta baixa desenhada como um processo comercial: seis ambientes ligados por uma circulação de follow-up, na ordem do funil. Atração, formulário, WhatsApp, diagnóstico, proposta e contrato. Pontos laranja representam os pedidos: entram pela porta principal, parte deles fica em cada etapa e poucos chegam ao contrato."
   rooms:
@@ -58,3 +66,207 @@ manifesto:
     - "Cada detalhe do seu projeto é desenhado ao milímetro."
     - "O seu comercial ainda é improvisado."
   body: "A Hub Performance desenha essa parte: do primeiro anúncio ao contrato assinado, com o rigor de um desenho técnico. Só para arquitetos e designers de interiores."
+
+# F.02
+services:
+  title: "Serviços"
+  lead: "Seis frentes trabalhadas em conjunto. Anúncio sem processo comercial só gera pedido perdido."
+  deliverables_label: "Entregas"
+  items:
+    - number: "01"
+      name: "Estratégia comercial"
+      summary: "Antes de anunciar, definimos a quem vender, o que vender e por quanto."
+      drawing: strategy
+      deliverables:
+        - "Diagnóstico do atelier e do mercado"
+        - "Cliente ideal e ticket-alvo"
+        - "Oferta e posicionamento"
+        - "Metas e indicadores dos 90 dias"
+    - number: "02"
+      name: "Tráfego pago"
+      summary: "Campanhas no Meta e no Google para gerar pedidos de orçamento, não seguidores."
+      drawing: ads
+      deliverables:
+        - "Estrutura de campanhas"
+        - "Criativos e textos"
+        - "Segmentação por perfil e região"
+        - "Testes e otimização semanal"
+    - number: "03"
+      name: "Funis e páginas de conversão"
+      summary: "O caminho entre o anúncio e a conversa, desenhado para filtrar curiosos."
+      drawing: funnel
+      deliverables:
+        - "Landing pages"
+        - "Formulários com qualificação e lógica condicional"
+        - "Integração com o WhatsApp"
+        - "Remarketing"
+    - number: "04"
+      name: "CRM e processo comercial"
+      summary: "Cada lead com dono, prazo e próximo passo."
+      drawing: crm
+      deliverables:
+        - "Implementação do CRM"
+        - "Funil de vendas por etapas"
+        - "Cadência de follow-up"
+        - "Roteiros de WhatsApp e da chamada de diagnóstico"
+        - "Capacitação de quem faz o atendimento"
+    - number: "05"
+      name: "SEO e presença no Google"
+      summary: "Estar no Google quando alguém procura arquitetura ou interiores na sua cidade."
+      drawing: seo
+      deliverables:
+        - "SEO local e Perfil da Empresa no Google"
+        - "Páginas por serviço e região"
+        - "Conteúdo para pesquisas com intenção de compra"
+        - "Acompanhamento de posições"
+    - number: "06"
+      name: "Dados e relatórios"
+      summary: "Saber de onde veio cada contrato."
+      drawing: data
+      deliverables:
+        - "Pixel, API de Conversões, GA4 e Tag Manager"
+        - "Origem de cada lead rastreada"
+        - "Dashboard semanal"
+        - "Leitura mensal com recomendações"
+
+# F.03 (prazos das fases em proposta: validar antes de publicar)
+project:
+  title: "Projeto de 90 dias"
+  lead: "Início, fim e entregas definidos. Como qualquer obra séria."
+  phase_label: "Fase"
+  deliverable_label: "Entrega"
+  days: "Dias {from} a {to}"
+  axis_unit: "dias"
+  phases:
+    - number: "01"
+      name: "Levantamento"
+      from: 1
+      to: 4
+      body: "Acessos, auditoria das contas de anúncio, do site e do Instagram, leitura do processo comercial atual, concorrência e números do atelier."
+      deliverable: "Relatório de diagnóstico."
+    - number: "02"
+      name: "Anteprojeto"
+      from: 5
+      to: 8
+      body: "Cliente ideal, oferta, plano de mídia, desenho do funil e metas."
+      deliverable: "Plano dos 90 dias aprovado pelo atelier."
+    - number: "03"
+      name: "Execução"
+      from: 9
+      to: 14
+      body: "Tracking, CRM, páginas, formulários, criativos e campanhas montadas."
+      deliverable: "Estrutura completa pronta para ir ao ar."
+    - number: "04"
+      name: "Obra"
+      from: 15
+      to: 75
+      body: "Campanhas no ar, testes de criativo e público, otimização semanal e acompanhamento do atendimento comercial."
+      deliverable: "Relatório semanal e ajustes contínuos."
+    - number: "05"
+      name: "Entrega"
+      from: 76
+      to: 90
+      body: "Escala do que funcionou, consolidação do processo e leitura final dos números."
+      deliverable: "Relatório final e plano dos próximos 90 dias."
+  # [confirmar] se todos os itens entram no projeto
+  specs:
+    label: "Memória descritiva"
+    title: "O que o atelier recebe"
+    items:
+      - "Diagnóstico documentado do atelier e do mercado"
+      - "Plano de mídia e metas dos 90 dias"
+      - "Campanhas ativas no Meta e, quando fizer sentido, no Google"
+      - "Páginas e formulários de captação"
+      - "CRM configurado com funil e cadência de follow-up"
+      - "Roteiros de atendimento para WhatsApp e diagnóstico"
+      - "Tracking completo e dashboard semanal"
+      - "Relatório final com o plano dos 90 dias seguintes"
+
+# F.04 (os cases ficam em src/content/cases)
+results:
+  title: "Resultados"
+  lead: "Números reais, com período e fonte."
+  case_label: "Case"
+  challenge_label: "Desafio"
+  done_label: "O que foi feito"
+  period_label: "Período"
+  source_label: "Fonte"
+  evolution_label: "Evolução"
+
+# F.05 (os depoimentos ficam em src/content/depoimentos)
+testimonials:
+  title: "Palavra de cliente"
+  prev: "Depoimento anterior"
+  next: "Próximo depoimento"
+  translated: "Tradução do original em {lang}"
+  play: "Ver vídeo"
+  languages: { pt: "português", en: "inglês", es: "espanhol" }
+
+# F.06
+fit:
+  title: "Para quem é"
+  yes_title: "É para"
+  no_title: "Não é para"
+  yes:
+    - "Ateliers de arquitetura e estúdios de interiores com portfólio consolidado."
+    - "Quem já fatura [PREENCHER: faturamento mínimo mensal] e quer previsibilidade de novos projetos."
+    - "Quem tem verba para anúncios além do investimento no projeto."
+    - "Quem quer processo, não milagre."
+  no:
+    - "Quem procura gestão de redes sociais."
+    - "Quem não consegue responder aos pedidos no mesmo dia."
+    - "Quem ainda não tem portfólio para mostrar."
+    - "Quem escolhe agência pelo menor preço."
+  lead_label: "Responsável técnico"
+  lead_name: "[PREENCHER: nome completo]"
+  lead_role: "fundador da Hub Performance."
+  lead_text: "Conduz pessoalmente cada diagnóstico. Não há vendedor no meio."
+  lead_bio: "[PREENCHER: duas ou três linhas de trajetória]"
+  lead_link: "Instagram pessoal"
+  photo_placeholder: "[PREENCHER: foto em preto e branco]"
+
+# F.07
+faq:
+  title: "Perguntas frequentes"
+  items:
+    - q: "Trabalham só com arquitetos e designers de interiores?"
+      a: "Sim. É o único mercado que atendemos. Por isso campanha, formulário e follow-up já nascem pensados para o ciclo de venda de um projeto."
+    - q: "Como funciona o projeto de 90 dias?"
+      a: "São cinco fases com prazo e entrega definidos: levantamento, anteprojeto, execução, obra e entrega. No fim, apresentamos o relatório final e o plano dos 90 dias seguintes."
+    - q: "Quanto preciso investir em anúncios?"
+      a: "A verba de mídia é paga diretamente às plataformas e definida no diagnóstico, conforme a região e a meta. [PREENCHER: valor mínimo de referência, ex.: a partir de €300 por mês na Europa]"
+    # [validar] junto com os prazos das fases
+    - q: "Quando aparecem os primeiros pedidos?"
+      a: "As campanhas entram no ar ao fim da segunda semana. Volume e qualidade dependem de verba, região e oferta. Esses números são projetados no diagnóstico, nunca prometidos antes dele."
+    - q: "Fazem gestão de redes sociais?"
+      a: "Não. O nosso trabalho vai do anúncio ao contrato assinado."
+    - q: "Em que países e em que idioma atendem?"
+      a: "[PREENCHER: países e idioma do atendimento]"
+    - q: "Qual é a diferença para uma agência generalista?"
+      a: "Uma agência generalista aprende o seu mercado com o seu dinheiro. Nós só atendemos arquitetura e interiores: ticket alto, decisão lenta, cliente que compara portfólio. Tudo é desenhado para esse ciclo."
+    - q: "O que fica com o atelier se não houver renovação?"
+      a: "[PREENCHER: o que fica em nome do cliente, ex.: contas de anúncio, pixel, páginas, CRM, criativos]"
+
+# F.08
+cta:
+  title: "Cada projeto começa numa folha em branco. O seu comercial também."
+  button: "Iniciar projeto"
+  support: "Candidatura em 2 minutos. Diagnóstico conduzido pelo fundador."
+  # slots: "[PREENCHER: número de vagas por trimestre, só se for real]"
+
+footer:
+  tagline: "Marketing e processo comercial para arquitetos e designers de interiores"
+  email: "E-mail"
+  whatsapp: "WhatsApp"
+  instagram: "Instagram"
+  cities: "Cidades"
+  language: "Idioma"
+  privacy: "Privacidade"
+  cookies: "Cookies"
+  sheet: "Folha"
+  signature: "Desenhado e medido pela Hub Performance."
+  complaints: "Livro de Reclamações"
+
+notfound:
+  title: "Esta folha não consta do projeto."
+  back: "Voltar à planta"

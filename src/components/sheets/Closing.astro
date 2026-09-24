@@ -1,0 +1,259 @@
+---
+/*
+  F.08 · Iniciar projeto e rodapé. Fundo grafite.
+  O rodapé é o carimbo da última folha: uma tabela de fios finos.
+*/
+import Sheet from '../Sheet.astro';
+import Arrow from '../Arrow.astro';
+import Wordmark from '../Wordmark.astro';
+import { isPlaceholder, type Home, type NumberedSheet } from '../../lib/content';
+import { site } from '../../config/site';
+import { locales, path, type Locale } from '../../i18n';
+
+interface Props {
+  lang: Locale;
+  content: Home['cta'];
+  footer: Home['footer'];
+  sheet: NumberedSheet;
+  prefix: string;
+  total: string;
+}
+
+const { lang, content, footer, sheet, prefix, total } = Astro.props;
+const year = new Date().getFullYear();
+const digits = (v: string) => v.replace(/\D/g, '');
+const wa = site.whatsapp.default;
+---
+
+<Sheet id={sheet.id} prefix={prefix} number={sheet.number} total={total} label={sheet.label} title={content.title} dark splitSentences class="closing">
+  <div class="closing__cta wrap grid">
+    <div class="closing__action">
+      <a class="btn closing__btn" href={path('start', lang)} data-cta="final" data-magnetic>
+        <span>{content.button}</span>
+        <span class="btn__icon"><Arrow /></span>
+      </a>
+      <p class="closing__support">{content.support}</p>
+      {content.slots && <p class="closing__slots label">{content.slots}</p>}
+    </div>
+  </div>
+
+  <footer class="stamp wrap" aria-label={footer.tagline}>
+    <div class="stamp__table">
+      <div class="stamp__cell stamp__cell--logo">
+        <a href={path('home', lang)} aria-label="Hub Performance"><Wordmark /></a>
+      </div>
+      <div class="stamp__cell stamp__cell--tagline">
+        <p>{footer.tagline}</p>
+      </div>
+      <div class="stamp__cell stamp__cell--sheet">
+        <span class="stamp__k">{footer.sheet}</span>
+        <span class="stamp__v">{sheet.number}/{total}</span>
+      </div>
+
+      <div class="stamp__cell">
+        <span class="stamp__k">{footer.email}</span>
+        {isPlaceholder(site.email) ? <span class="stamp__v">{site.email}</span> : <a class="stamp__v" href={`mailto:${site.email}`}>{site.email}</a>}
+      </div>
+      <div class="stamp__cell">
+        <span class="stamp__k">{footer.whatsapp}</span>
+        {
+          isPlaceholder(wa) ? (
+            <span class="stamp__v">{wa}</span>
+          ) : (
+            <a class="stamp__v" href={`https://wa.me/${digits(wa)}`} data-whatsapp="footer" rel="noopener">
+              +{digits(wa)}
+            </a>
+          )
+        }
+      </div>
+      <div class="stamp__cell">
+        <span class="stamp__k">{footer.instagram}</span>
+        <a class="stamp__v" href={site.instagram.url} rel="noopener" target="_blank">{site.instagram.handle}</a>
+      </div>
+      <div class="stamp__cell">
+        <span class="stamp__k">{footer.cities}</span>
+        <span class="stamp__v">{site.cities.join(' · ')}</span>
+      </div>
+
+      <div class="stamp__cell">
+        <span class="stamp__k">{footer.language}</span>
+        <span class="stamp__v stamp__langs">
+          {
+            locales.map((l) => (
+              <a href={path('home', l)} hreflang={l} lang={l} aria-current={l === lang ? 'true' : undefined} data-lang-link={l}>
+                {l.toUpperCase()}
+              </a>
+            ))
+          }
+        </span>
+      </div>
+      <div class="stamp__cell">
+        <a class="stamp__v" href={path('privacy', lang)}>{footer.privacy}</a>
+        <a class="stamp__v" href={path('cookies', lang)}>{footer.cookies}</a>
+        {
+          site.complaintsBookUrl && (
+            <a class="stamp__v" href={site.complaintsBookUrl} rel="noopener" target="_blank">
+              {footer.complaints}
+            </a>
+          )
+        }
+      </div>
+      <div class="stamp__cell stamp__cell--wide">
+        <span class="stamp__k">© {year}</span>
+        <span class="stamp__v">Hub Performance</span>
+      </div>
+      <div class="stamp__cell stamp__cell--full">
+        <p class="stamp__signature">{footer.signature}</p>
+      </div>
+    </div>
+  </footer>
+</Sheet>
+
+<style>
+  :global(.sheet.closing) {
+    padding-bottom: calc(var(--s-6) + env(safe-area-inset-bottom, 0px));
+  }
+
+  :global(.closing .sheet__title) {
+    font-size: var(--text-display);
+    max-width: 18ch;
+  }
+
+  :global(.closing .sheet__title .sentence) {
+    display: block;
+  }
+
+  .closing__action {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--s-4);
+  }
+
+  .closing__btn {
+    min-width: min(100%, 320px);
+    min-height: 60px;
+  }
+
+  .closing__support {
+    max-width: 40ch;
+    color: var(--fg-muted);
+  }
+
+  /* Carimbo do rodapé */
+  .stamp {
+    margin-top: var(--s-10);
+  }
+
+  /* Fios da tabela: o espaço de 1 px da grelha deixa ver a cor da linha. */
+  .stamp__table {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--fg);
+  }
+
+  .stamp__cell {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+    padding: var(--s-3);
+    background: var(--bg);
+  }
+
+  .stamp__cell--logo,
+  .stamp__cell--tagline,
+  .stamp__cell--full {
+    grid-column: 1 / -1;
+  }
+
+  .stamp__cell--tagline p {
+    max-width: 34ch;
+    color: var(--fg-muted);
+  }
+
+  .stamp__k {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+
+  .stamp__v {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    overflow-wrap: anywhere;
+  }
+
+  a.stamp__v {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    align-self: flex-start;
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+    text-underline-offset: 4px;
+  }
+
+  @media (hover: hover) {
+    a.stamp__v:hover {
+      text-decoration-color: currentColor;
+    }
+  }
+
+  .stamp__langs {
+    display: flex;
+    gap: var(--s-3);
+  }
+
+  .stamp__langs a {
+    color: var(--fg-muted);
+  }
+
+  .stamp__langs a[aria-current='true'] {
+    color: var(--fg);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .stamp__signature {
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+
+  @media (min-width: 768px) {
+    .closing__action {
+      grid-column: 4 / 13;
+    }
+
+    .stamp__table {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .stamp__cell--logo {
+      grid-column: 1 / 2;
+      justify-content: center;
+    }
+
+    .stamp__cell--tagline {
+      grid-column: 2 / 4;
+      justify-content: center;
+    }
+
+    .stamp__cell--wide {
+      grid-column: 3 / 5;
+    }
+
+    .stamp__cell--full {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

@@ -1,0 +1,22 @@
+# Depoimento 1. [PREENCHER] com o depoimento real.
+# publicado: false não vai ao ar. Em desenvolvimento aparece com a marca "EXEMPLO".
+# Clientes de Portugal: português de Portugal, na voz do cliente, sóbrio, com números, sem exagero.
+publicado: false
+ordem: 1
+# Idioma em que o cliente falou (pt, en ou es). As outras versões aparecem marcadas como tradução.
+original: pt
+nome: "[PREENCHER: nome]"
+funcao:
+  pt: "[PREENCHER: função]"
+  en: "[PREENCHER: role]"
+  es: "[PREENCHER: cargo]"
+atelier: "[PREENCHER: atelier]"
+cidade: "[PREENCHER: cidade]"
+texto:
+  pt: "[PREENCHER: depoimento real, na voz do cliente]"
+  en: "[PREENCHER: translation of the testimonial]"
+  es: "[PREENCHER: traducción del testimonio]"
+# Opcional: vídeo (arquivo .mp4 em public/ ou link do YouTube/Vimeo) e capa em src/assets/depoimentos/.
+# video:
+#   url: "/video/depoimento-01.mp4"
+#   capa: ../../assets/depoimentos/01.jpg

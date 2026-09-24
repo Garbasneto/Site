@@ -1,0 +1,56 @@
+---
+/* Celular: barra fina fixa na base com "Iniciar projeto". Aparece depois do hero e some quando o CTA final entra. */
+import Arrow from './Arrow.astro';
+
+interface Props {
+  href: string;
+  label: string;
+}
+
+const { href, label } = Astro.props;
+---
+
+<a class="mcta" href={href} data-cta="mobile-bar" data-mobile-cta tabindex="-1" aria-hidden="true">
+  <span>{label}</span>
+  <span class="btn__icon"><Arrow /></span>
+</a>
+
+<style>
+  .mcta {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: var(--z-nav);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: calc(52px + env(safe-area-inset-bottom, 0px));
+    padding: 0 var(--margin) env(safe-area-inset-bottom, 0px);
+    background: var(--graphite);
+    color: var(--paper);
+    font-size: 0.9375rem;
+    font-weight: var(--weight-medium);
+    letter-spacing: -0.01em;
+    border-top: 1px solid var(--line-on-dark);
+    transform: translateY(101%);
+    transition: transform var(--dur-1) var(--ease);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mcta:global(.is-visible) {
+    transform: none;
+  }
+
+  :global(html.on-dark) .mcta {
+    background: var(--paper);
+    color: var(--graphite);
+    border-top-color: var(--line);
+  }
+
+  @media (min-width: 768px) {
+    .mcta {
+      display: none;
+    }
+  }
+</style>

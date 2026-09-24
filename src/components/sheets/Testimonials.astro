@@ -1,0 +1,210 @@
+---
+/*
+  F.05 · Palavra de cliente. Um depoimento por vez, texto grande.
+  Setas e arraste, contador, troca por máscara de linha, sem autoplay. Vídeo opcional (capa e play).
+  Sem JavaScript, todos aparecem em sequência.
+*/
+import { Picture } from 'astro:assets';
+import Sheet from '../Sheet.astro';
+import DraftMark from '../DraftMark.astro';
+import Arrow from '../Arrow.astro';
+import { fill, type Home, type NumberedSheet, type TestimonialItem } from '../../lib/content';
+import type { Locale } from '../../i18n';
+
+interface Props {
+  lang: Locale;
+  content: Home['testimonials'];
+  watermark: string;
+  items: TestimonialItem[];
+  sheet: NumberedSheet;
+  prefix: string;
+  total: string;
+}
+
+const { lang, content, watermark, items, sheet, prefix, total } = Astro.props;
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+
+<Sheet id={sheet.id} prefix={prefix} number={sheet.number} total={total} label={sheet.label} title={content.title}>
+  <div class="tm wrap grid" data-testimonials>
+    <div class="tm__stage" aria-live="polite" data-tm-stage>
+      {
+        items.map((t, i) => (
+          <figure class:list={['tm__item', { 'is-active': i === 0 }]} data-tm={i} aria-roledescription="slide">
+            {t.draft && <DraftMark text={watermark} />}
+            {t.video && (
+              <button class="tm__video" type="button" data-video={t.video.url}>
+                {t.video.capa && <Picture src={t.video.capa} alt="" widths={[480, 960]} sizes="(min-width: 768px) 40vw, 100vw" formats={['avif', 'webp']} loading="lazy" />}
+                <span class="tm__play label">{content.play}</span>
+              </button>
+            )}
+            <blockquote class="tm__quote">
+              <p data-tm-text>“{t.texto[lang]}”</p>
+            </blockquote>
+            <figcaption class="tm__cap">
+              <span class="tm__name">{t.nome}</span>
+              <span>{t.funcao[lang]}</span>
+              <span>{t.atelier}</span>
+              <span>{t.cidade}</span>
+              {t.original !== lang && <span class="tm__tr">{fill(content.translated, { lang: content.languages[t.original] })}</span>}
+            </figcaption>
+          </figure>
+        ))
+      }
+    </div>
+    {
+      items.length > 1 && (
+        <div class="tm__controls">
+          <button class="tm__btn tm__btn--prev" type="button" aria-label={content.prev} data-tm-prev>
+            <Arrow />
+          </button>
+          <span class="tm__count">
+            <span data-tm-current>01</span>/{pad(items.length)}
+          </span>
+          <button class="tm__btn" type="button" aria-label={content.next} data-tm-next>
+            <Arrow />
+          </button>
+        </div>
+      )
+    }
+  </div>
+</Sheet>
+
+<style>
+  .tm {
+    row-gap: var(--s-6);
+  }
+
+  .tm__stage {
+    grid-column: 1 / -1;
+    display: grid;
+    touch-action: pan-y;
+    user-select: none;
+  }
+
+  .tm__item {
+    position: relative;
+    grid-area: 1 / 1;
+    padding: var(--s-6) 0;
+  }
+
+  :global(.js) .tm__item:not(.is-active) {
+    visibility: hidden;
+  }
+
+  :global(html:not(.js)) .tm__stage {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-7);
+  }
+
+  .tm__quote p {
+    font-size: clamp(1.625rem, 1.05rem + 2.4vw, 3.25rem);
+    line-height: 1.12;
+    letter-spacing: -0.028em;
+    text-wrap: balance;
+    max-width: 26ch;
+  }
+
+  .tm__cap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-1) var(--s-4);
+    margin-top: var(--s-6);
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+
+  .tm__name {
+    color: var(--fg);
+  }
+
+  .tm__tr {
+    flex-basis: 100%;
+    text-transform: none;
+    letter-spacing: 0.02em;
+  }
+
+  .tm__video {
+    position: relative;
+    display: block;
+    width: 100%;
+    max-width: 560px;
+    aspect-ratio: 16 / 9;
+    margin-bottom: var(--s-6);
+    background: var(--graphite);
+    color: var(--paper);
+    overflow: hidden;
+  }
+
+  .tm__video :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .tm__play {
+    position: absolute;
+    left: var(--s-4);
+    bottom: var(--s-4);
+    padding: 6px 10px;
+    background: var(--paper);
+    color: var(--graphite);
+  }
+
+  .tm__controls {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: var(--s-5);
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--rule);
+  }
+
+  .tm__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border: 1px solid var(--fg);
+    transition: background-color 0.2s linear, color 0.2s linear;
+  }
+
+  .tm__btn :global(svg) {
+    width: 14px;
+    height: 14px;
+  }
+
+  .tm__btn--prev :global(svg) {
+    transform: scaleX(-1);
+  }
+
+  @media (hover: hover) {
+    .tm__btn:hover {
+      background: var(--fg);
+      color: var(--bg);
+    }
+  }
+
+  .tm__count {
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-label);
+    min-width: 5ch;
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    .tm__stage {
+      grid-column: 4 / 13;
+    }
+
+    .tm__controls {
+      grid-column: 4 / 13;
+    }
+  }
+</style>

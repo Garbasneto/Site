@@ -38,7 +38,25 @@ Tudo fica num único arquivo: `src/config/site.ts`.
 
 ## Como publicar um case
 
-Chega na Etapa 2. Cada case será um arquivo em `src/content/cases/` com o campo `publicado: true` ou `false`. Só os publicados vão ao ar.
+Cada case é um arquivo em `src/content/cases/` (hoje: `porto.yaml`, `algarve.yaml`, `madrid.yaml`, os slots sugeridos). Dentro dele, os textos vêm em três blocos (`pt`, `en`, `es`) e os números ficam uma vez só, para nunca haver um número diferente por idioma.
+
+1. Abra o arquivo do case e troque cada `[PREENCHER: ...]` pelo dado real.
+2. Em `numeros`, coloque o valor como número (ex.: `valor: 38`), com `sufixo: "%"` ou `prefixo: "€"` se precisar. Sempre com período e fonte.
+3. Opcional: foto de um projeto do cliente (com autorização) em `src/assets/cases/` e a linha `foto:` descomentada. O site gera AVIF e WebP em vários tamanhos.
+4. Opcional: `serie` com os valores reais em ordem (ex.: pedidos por semana). Só com série real aparece a linha de evolução.
+5. Mude `publicado: false` para `publicado: true`.
+
+Enquanto `publicado` for `false`, o case aparece só no computador (`npm run dev`), com a marca "EXEMPLO". No site publicado ele não existe. Se nenhum case estiver publicado, a folha Resultados e o item do índice somem, e a numeração das folhas se ajusta sozinha.
+
+Para um case novo, copie um dos arquivos e mude o nome, a cidade, as coordenadas e a `ordem`.
+
+## Como publicar um depoimento
+
+Igual aos cases, em `src/content/depoimentos/`. O campo `original` diz em que idioma o cliente falou; nas outras línguas o site mostra a nota "Tradução do original em ...". Vídeo é opcional (arquivo .mp4 em `public/` ou link do YouTube ou Vimeo, com capa em `src/assets/depoimentos/`).
+
+## Foto do fundador
+
+Salve a foto como `src/assets/fundador.jpg` (ou `.png` ou `.webp`). Ela aparece automaticamente em preto e branco na folha "Para quem é". O nome, a trajetória e o link do Instagram ficam em `src/content/home/*.yaml` (bloco `fit`) e em `src/config/site.ts` (`founder`).
 
 ## Planta do hero
 
@@ -48,10 +66,13 @@ A planta é desenhada a partir de números em `src/data/plan.ts` (paredes, porta
 
 ```
 npm run dev
-npm run shots
+npm run shots          (hero: abertura aos 0,5 s, 1,5 s e 3 s e três pontos da extrusão)
+npm run shots:sheets   (todas as folhas, o índice, a grelha da tecla G e a 404)
 ```
 
-Gera screenshots em `screenshots/latest/` (celular 390x844 e desktop 1440x900, com a abertura aos 0,5 s, 1,5 s e 3 s e três pontos da extrusão). Na primeira vez, rode `npx playwright install chromium`.
+As imagens ficam em `screenshots/` (celular 390x844 e desktop 1440x900). Na primeira vez, rode `npx playwright install chromium`.
+
+Dica: no desktop, a tecla G mostra a grelha de 12 colunas por cima do site.
 
 ## Pendências para revisar antes de publicar
 
@@ -74,4 +95,5 @@ Marcadas no briefing como [confirmar], [validar] ou [PREENCHER]:
 - [PREENCHER] Faixas de faturamento por moeda (€, US$, R$).
 - [PREENCHER] URL do webhook (FORM_WEBHOOK_URL), token do Pipedrive (opcional), ID do GTM (PUBLIC_GTM_ID), URL do Respondi.
 - [PREENCHER] Razão social, número fiscal e endereço (páginas de Privacidade e Cookies, com revisão jurídica pendente).
-- [Opcional] Número de vagas por trimestre no CTA final, só se for real.
+- [Opcional] Número de vagas por trimestre no CTA final, só se for real (`cta.slots` nos arquivos de texto).
+- Páginas de Privacidade e Cookies: chegam na Etapa 3 (os links do rodapé já apontam para elas).

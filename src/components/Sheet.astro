@@ -1,0 +1,104 @@
+---
+/*
+  Uma folha do projeto: seção com rótulo técnico ("F.03 · MÉTODO"), título claro e linha de apoio.
+  A metáfora fica no rótulo; o título é direto.
+*/
+interface Props {
+  id: string;
+  prefix: string;
+  number: string;
+  total: string;
+  label: string;
+  title: string;
+  lead?: string;
+  dark?: boolean;
+  /** Uma linha por frase no título (ex.: CTA final). */
+  splitSentences?: boolean;
+  class?: string;
+}
+
+const { id, prefix, number, total, label, title, lead, dark = false, splitSentences = false, class: extra } = Astro.props;
+const sentences = splitSentences ? title.split(/(?<=[.!?])\s+/) : null;
+---
+
+<section
+  class:list={['sheet', { 'sheet--dark': dark }, extra]}
+  id={id}
+  data-sheet={id}
+  data-sheet-code={`${prefix}.${number}/${total} · ${label.toLocaleUpperCase()}`}
+  data-dark={dark ? '' : undefined}
+  aria-labelledby={`${id}-title`}
+>
+  <header class="sheet__head wrap grid">
+    <p class="sheet__label label" data-reveal="fade">{prefix}.{number} · {label}</p>
+    <div class="sheet__titles">
+      <h2 class="sheet__title" id={`${id}-title`} data-reveal="lines">
+        {sentences ? sentences.map((t) => <span class="sentence">{t} </span>) : title}
+      </h2>
+      {lead && <p class="sheet__lead" data-reveal="lines">{lead}</p>}
+    </div>
+  </header>
+  <slot />
+</section>
+
+<style>
+  .sheet {
+    position: relative;
+    z-index: 1;
+    padding-block: var(--s-9) var(--s-10);
+    color: var(--fg);
+  }
+
+  .sheet--dark {
+    background: var(--bg);
+  }
+
+  .sheet__head {
+    row-gap: var(--s-4);
+    padding-top: var(--s-4);
+    margin-bottom: var(--s-8);
+    border-top: 1px solid var(--rule);
+  }
+
+  .sheet__label {
+    grid-column: 1 / -1;
+  }
+
+  .sheet__titles {
+    grid-column: 1 / -1;
+  }
+
+  .sheet__title {
+    font-size: var(--text-h2);
+    line-height: var(--leading-display);
+    letter-spacing: var(--tracking-display);
+    font-weight: var(--weight-regular);
+  }
+
+  .sheet__lead {
+    margin-top: var(--s-5);
+    max-width: 46ch;
+    font-size: var(--text-lead);
+    line-height: 1.45;
+    color: var(--fg-muted);
+  }
+
+  @media (min-width: 768px) {
+    .sheet {
+      padding-block: var(--s-10) var(--s-11);
+    }
+
+    .sheet__head {
+      margin-bottom: var(--s-9);
+    }
+
+    .sheet__label {
+      grid-column: 1 / 4;
+      padding-top: 0.9em;
+    }
+
+    .sheet__titles {
+      grid-column: 4 / 13;
+    }
+  }
+</style>

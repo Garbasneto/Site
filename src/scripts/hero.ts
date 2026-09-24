@@ -4,6 +4,7 @@
 */
 
 import { EASE, gsap, media, ScrollTrigger, SplitText } from './motion';
+import { initMagnetic } from './magnetic';
 import { buildPlan, type BuiltPlan } from '../lib/plan/geometry';
 import { LeadFlow } from '../lib/plan/leads';
 import { PlanRenderer, type PlanText, type Region, type RenderState } from '../lib/plan/renderer';
@@ -274,24 +275,7 @@ export function initHero(): (() => void) | undefined {
     });
     frame.addEventListener('pointerleave', () => cursor.classList.remove('is-on'));
 
-    if (!reduced) {
-      const btn = q<HTMLElement>('[data-magnetic]');
-      const xTo = gsap.quickTo(btn, 'x', { duration: 0.6, ease: EASE });
-      const yTo = gsap.quickTo(btn, 'y', { duration: 0.6, ease: EASE });
-      const reach = 70;
-      window.addEventListener(
-        'pointermove',
-        (e) => {
-          const r = btn.getBoundingClientRect();
-          const dx = e.clientX - (r.left + r.width / 2);
-          const dy = e.clientY - (r.top + r.height / 2);
-          const inside = Math.abs(dx) < r.width / 2 + reach && Math.abs(dy) < r.height / 2 + reach;
-          xTo(inside ? gsap.utils.clamp(-10, 10, dx * 0.08) : 0);
-          yTo(inside ? gsap.utils.clamp(-8, 8, dy * 0.22) : 0);
-        },
-        { passive: true },
-      );
-    }
+    if (!reduced) initMagnetic(q<HTMLElement>('[data-magnetic]'));
   }
 
   return setupScroll;

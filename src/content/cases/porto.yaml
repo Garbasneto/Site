@@ -1,0 +1,40 @@
+# Case 1: slot sugerido (Porto). [PREENCHER] com o case real.
+# publicado: false não vai ao ar. Em desenvolvimento aparece com a marca "EXEMPLO".
+# Nome do cliente só com autorização; sem ela, uma descrição (ex.: "Atelier de arquitetura residencial").
+publicado: false
+ordem: 1
+cidade: "Porto"
+pais: { pt: "Portugal", en: "Portugal", es: "Portugal" }
+# Coordenadas reais da cidade (graus decimais).
+coordenadas: { lat: 41.1579, lng: -8.6291 }
+cliente:
+  pt: "[PREENCHER: nome do atelier, com autorização, ou descrição]"
+  en: "[PREENCHER: studio name, with permission, or a description]"
+  es: "[PREENCHER: nombre del estudio, con autorización, o descripción]"
+desafio:
+  pt: "[PREENCHER: o desafio, em uma frase]"
+  en: "[PREENCHER: the challenge, in one sentence]"
+  es: "[PREENCHER: el reto, en una frase]"
+feito:
+  pt: "[PREENCHER: o que foi feito, em uma ou duas frases]"
+  en: "[PREENCHER: what we did, in one or two sentences]"
+  es: "[PREENCHER: lo que hicimos, en una o dos frases]"
+# Dois ou três números. valor: número real (ex.: 38) ou [PREENCHER]. prefixo/sufixo: ex. "€", "%", "x".
+numeros:
+  - valor: "[PREENCHER]"
+    sufixo: ""
+    metrica: { pt: "[PREENCHER: métrica]", en: "[PREENCHER: metric]", es: "[PREENCHER: métrica]" }
+    periodo: { pt: "[PREENCHER: período]", en: "[PREENCHER: period]", es: "[PREENCHER: periodo]" }
+    fonte: { pt: "[PREENCHER: fonte, ex.: gerenciador de anúncios]", en: "[PREENCHER: source, e.g. ads manager]", es: "[PREENCHER: fuente, p. ej. administrador de anuncios]" }
+  - valor: "[PREENCHER]"
+    sufixo: ""
+    metrica: { pt: "[PREENCHER: métrica]", en: "[PREENCHER: metric]", es: "[PREENCHER: métrica]" }
+    periodo: { pt: "[PREENCHER: período]", en: "[PREENCHER: period]", es: "[PREENCHER: periodo]" }
+    fonte: { pt: "[PREENCHER: fonte, ex.: CRM]", en: "[PREENCHER: source, e.g. CRM]", es: "[PREENCHER: fuente, p. ej. CRM]" }
+# Opcional: série real, em ordem (ex.: pedidos por semana), para desenhar a linha de evolução.
+serie: []
+# Opcional, com autorização: foto de um projeto do cliente em src/assets/cases/ (ex.: ../../assets/cases/porto.jpg)
+# foto: ../../assets/cases/porto.jpg
+# foto_alt: { pt: "", en: "", es: "" }
+# Opcional: frase curta do cliente.
+# frase: { pt: "", en: "", es: "" }

@@ -2,9 +2,19 @@
 import Base from '../layouts/Base.astro';
 import Header from './Header.astro';
 import Hero from './hero/Hero.astro';
-import NextSheet from './NextSheet.astro';
-import { getHome, numberSheets } from '../lib/content';
-import type { Locale } from '../i18n';
+import Services from './sheets/Services.astro';
+import Project from './sheets/Project.astro';
+import Results from './sheets/Results.astro';
+import Testimonials from './sheets/Testimonials.astro';
+import Fit from './sheets/Fit.astro';
+import Faq from './sheets/Faq.astro';
+import Closing from './sheets/Closing.astro';
+import SheetIndex from './SheetIndex.astro';
+import SheetIndicator from './SheetIndicator.astro';
+import MobileCta from './MobileCta.astro';
+import GridOverlay from './GridOverlay.astro';
+import { getCases, getHome, getTestimonials, numberSheets, type SheetId } from '../lib/content';
+import { path, type Locale } from '../i18n';
 
 interface Props {
   lang: Locale;
@@ -12,19 +22,82 @@ interface Props {
 
 const { lang } = Astro.props;
 const home = await getHome(lang);
-// Etapa 2 decide quais folhas somem (cases e depoimentos sem nada publicado).
-const sheets = numberSheets(home.sheets);
-const planta = sheets.list.find((s) => s.id === 'planta')!;
-const next = sheets.list[1];
+const cases = await getCases();
+const testimonials = await getTestimonials();
+
+// Folhas sem nada publicado saem do site e do índice; a numeração se ajusta.
+const hidden: SheetId[] = [];
+if (!cases.length) hidden.push('resultados');
+if (!testimonials.length) hidden.push('palavra');
+const sheets = numberSheets(home.sheets, hidden);
+const get = (id: SheetId) => sheets.list.find((s) => s.id === id);
+const prefix = home.nav.sheet_prefix;
+const total = sheets.total;
+const code = (id: SheetId) => {
+  const s = get(id)!;
+  return `${prefix}.${s.number}/${total} · ${s.label.toLocaleUpperCase()}`;
+};
+
+const planta = get('planta')!;
+const servicos = get('servicos');
+const projeto = get('projeto');
+const resultados = get('resultados');
+const palavra = get('palavra');
+const paraQuem = get('para-quem');
+const perguntas = get('perguntas');
+const iniciar = get('iniciar');
 ---
 
 <Base lang={lang} title={home.meta.title} description={home.meta.description}>
+  <div class="dark-layer" aria-hidden="true" data-dark-layer></div>
   <Header lang={lang} nav={home.nav} />
   <main id="conteudo">
-    <Hero lang={lang} hero={home.hero} manifesto={home.manifesto} sheet={{ number: planta.number, total: sheets.total }} />
-    <NextSheet prefix={home.nav.sheet_prefix} sheet={next} />
+    <Hero lang={lang} hero={home.hero} manifesto={home.manifesto} sheet={{ number: planta.number, total, code: code('planta') }} />
+    {servicos && <Services content={home.services} sheet={servicos} prefix={prefix} total={total} />}
+    {projeto && <Project content={home.project} sheet={projeto} prefix={prefix} total={total} />}
+    {
+      resultados && (
+        <Results lang={lang} content={home.results} watermark={home.drafts.watermark} cases={cases} sheet={resultados} prefix={prefix} total={total} />
+      )
+    }
+    {
+      palavra && (
+        <Testimonials
+          lang={lang}
+          content={home.testimonials}
+          watermark={home.drafts.watermark}
+          items={testimonials}
+          sheet={palavra}
+          prefix={prefix}
+          total={total}
+        />
+      )
+    }
+    {paraQuem && <Fit content={home.fit} sheet={paraQuem} prefix={prefix} total={total} />}
+    {perguntas && <Faq content={home.faq} sheet={perguntas} prefix={prefix} total={total} />}
+    {iniciar && <Closing lang={lang} content={home.cta} footer={home.footer} sheet={iniciar} prefix={prefix} total={total} />}
   </main>
+  <SheetIndicator initial={code('planta')} />
+  <MobileCta href={path('start', lang)} label={home.nav.cta} />
+  <SheetIndex lang={lang} content={home.index} nav={home.nav} sheets={sheets.list} />
+  <GridOverlay />
 </Base>
+
+<style>
+  .dark-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: var(--graphite);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  main {
+    position: relative;
+    z-index: 1;
+  }
+</style>
 
 <script>
   import '../scripts/home';

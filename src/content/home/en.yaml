@@ -23,6 +23,13 @@ sheets:
   - { id: perguntas, label: "Questions", title: "Frequently asked questions" }
   - { id: iniciar, label: "Start", title: "Start your project" }
 
+index:
+  title: "Sheet index"
+  close: "Close"
+
+drafts:
+  watermark: "Example"
+
 hero:
   plan_description: "A floor plan drawn as a sales process: six rooms connected by a follow-up circulation, in funnel order. Acquisition, form, WhatsApp, diagnostic, proposal and contract. Orange dots are the leads: they come in through the main door, some stay behind at each stage and few reach the contract."
   rooms:
@@ -55,3 +62,197 @@ manifesto:
     - "Every detail of your project is drawn to the millimeter."
     - "Your sales process is still improvised."
   body: "Hub Performance designs that part: from the first ad to the signed contract, with the rigor of a technical drawing. Only for architects and interior designers."
+
+services:
+  title: "Services"
+  lead: "Six fronts, worked together. Ads without a sales process only produce lost inquiries."
+  deliverables_label: "Deliverables"
+  items:
+    - number: "01"
+      name: "Sales strategy"
+      summary: "Before any ad goes live, we define who to sell to, what to sell and at what price."
+      drawing: strategy
+      deliverables:
+        - "Studio and market diagnostic"
+        - "Ideal client and target project value"
+        - "Offer and positioning"
+        - "Goals and KPIs for the 90 days"
+    - number: "02"
+      name: "Paid media"
+      summary: "Meta and Google campaigns built to bring in quote requests, not followers."
+      drawing: ads
+      deliverables:
+        - "Campaign structure"
+        - "Creative and copy"
+        - "Targeting by profile and region"
+        - "Weekly testing and optimization"
+    - number: "03"
+      name: "Funnels and landing pages"
+      summary: "The path between the ad and the conversation, designed to filter out the curious."
+      drawing: funnel
+      deliverables:
+        - "Landing pages"
+        - "Qualifying forms with conditional logic"
+        - "WhatsApp integration"
+        - "Retargeting"
+    - number: "04"
+      name: "CRM and sales process"
+      summary: "Every lead with an owner, a deadline and a next step."
+      drawing: crm
+      deliverables:
+        - "CRM setup"
+        - "Stage-based sales pipeline"
+        - "Follow-up cadence"
+        - "Scripts for WhatsApp and the diagnostic call"
+        - "Training for whoever handles inquiries"
+    - number: "05"
+      name: "SEO and Google presence"
+      summary: "Show up on Google when someone searches for architecture or interior design in your city."
+      drawing: seo
+      deliverables:
+        - "Local SEO and Google Business Profile"
+        - "Pages by service and region"
+        - "Content for high-intent searches"
+        - "Rank tracking"
+    - number: "06"
+      name: "Data and reporting"
+      summary: "Know where every contract came from."
+      drawing: data
+      deliverables:
+        - "Pixel, Conversions API, GA4 and Tag Manager"
+        - "Source tracking for every lead"
+        - "Weekly dashboard"
+        - "Monthly review with recommendations"
+
+project:
+  title: "90-day project"
+  lead: "A defined start, finish and set of deliverables. Like any serious build."
+  phase_label: "Phase"
+  deliverable_label: "Deliverable"
+  days: "Days {from} to {to}"
+  axis_unit: "days"
+  phases:
+    - number: "01"
+      name: "Survey"
+      from: 1
+      to: 4
+      body: "Account access, an audit of the ad accounts, website and Instagram, a review of the current sales process, competitors and studio numbers."
+      deliverable: "Diagnostic report."
+    - number: "02"
+      name: "Concept"
+      from: 5
+      to: 8
+      body: "Ideal client, offer, media plan, funnel design and goals."
+      deliverable: "90-day plan approved by the studio."
+    - number: "03"
+      name: "Technical design"
+      from: 9
+      to: 14
+      body: "Tracking, CRM, pages, forms, creative and campaigns, all built."
+      deliverable: "Full structure, ready to go live."
+    - number: "04"
+      name: "Construction"
+      from: 15
+      to: 75
+      body: "Campaigns live, creative and audience testing, weekly optimization and close oversight of how inquiries are handled."
+      deliverable: "Weekly report and continuous adjustments."
+    - number: "05"
+      name: "Handover"
+      from: 76
+      to: 90
+      body: "Scaling what worked, locking in the process and a final read of the numbers."
+      deliverable: "Final report and a plan for the next 90 days."
+  specs:
+    label: "Specifications"
+    title: "What the studio receives"
+    items:
+      - "Documented diagnostic of the studio and its market"
+      - "Media plan and 90-day goals"
+      - "Live campaigns on Meta and, when it makes sense, on Google"
+      - "Lead capture pages and forms"
+      - "CRM configured with pipeline and follow-up cadence"
+      - "Scripts for WhatsApp and the diagnostic call"
+      - "Full tracking and a weekly dashboard"
+      - "Final report with the plan for the next 90 days"
+
+results:
+  title: "Results"
+  lead: "Real numbers, with period and source."
+  case_label: "Case"
+  challenge_label: "Challenge"
+  done_label: "What we did"
+  period_label: "Period"
+  source_label: "Source"
+  evolution_label: "Trend"
+
+testimonials:
+  title: "In their words"
+  prev: "Previous testimonial"
+  next: "Next testimonial"
+  translated: "Translated from the original in {lang}"
+  play: "Watch video"
+  languages: { pt: "Portuguese", en: "English", es: "Spanish" }
+
+fit:
+  title: "Who it is for"
+  yes_title: "It is for"
+  no_title: "It is not for"
+  yes:
+    - "Architecture and interior design studios with an established portfolio."
+    - "Studios already billing [PREENCHER: minimum monthly revenue] that want a predictable flow of new projects."
+    - "Studios with an ad budget on top of the project investment."
+    - "Studios that want a process, not a miracle."
+  no:
+    - "Anyone looking for social media management."
+    - "Studios that cannot reply to inquiries the same day."
+    - "Studios that do not have a portfolio to show yet."
+    - "Anyone who picks an agency on lowest price."
+  lead_label: "Project lead"
+  lead_name: "[PREENCHER: full name]"
+  lead_role: "founder of Hub Performance."
+  lead_text: "Leads every diagnostic personally. No salesperson in between."
+  lead_bio: "[PREENCHER: two or three lines of background]"
+  lead_link: "Personal Instagram"
+  photo_placeholder: "[PREENCHER: black and white photo]"
+
+faq:
+  title: "Frequently asked questions"
+  items:
+    - q: "Do you only work with architects and interior designers?"
+      a: "Yes. It is the only market we serve. That is why campaigns, forms and follow-up are built from day one for the sales cycle of a design project."
+    - q: "How does the 90-day project work?"
+      a: "Five phases, each with a deadline and a deliverable: survey, concept, technical design, construction and handover. At the end, we present the final report and the plan for the next 90 days."
+    - q: "How much do I need to invest in ads?"
+      a: "Media spend is paid directly to the platforms and set during the diagnostic, based on region and goal. [PREENCHER: minimum reference amount, e.g. from $300 per month]"
+    - q: "When do the first inquiries come in?"
+      a: "Campaigns go live at the end of the second week. Volume and quality depend on budget, region and offer. These numbers are projected in the diagnostic, never promised before it."
+    - q: "Do you manage social media?"
+      a: "No. Our work runs from the ad to the signed contract."
+    - q: "Which countries do you work in, and in which language?"
+      a: "[PREENCHER: countries and service language]"
+    - q: "How are you different from a generalist agency?"
+      a: "A generalist agency learns your market with your money. We only serve architecture and interiors: high-value projects, slow decisions, clients who compare portfolios. Everything is designed for that cycle."
+    - q: "What stays with the studio if we do not renew?"
+      a: "[PREENCHER: what stays in the client's name, e.g. ad accounts, pixel, pages, CRM, creative]"
+
+cta:
+  title: "Every project starts on a blank sheet. So does your sales process."
+  button: "Start your project"
+  support: "Application in 2 minutes. Diagnostic led by the founder."
+
+footer:
+  tagline: "Marketing and sales process for architects and interior designers"
+  email: "Email"
+  whatsapp: "WhatsApp"
+  instagram: "Instagram"
+  cities: "Cities"
+  language: "Language"
+  privacy: "Privacy"
+  cookies: "Cookies"
+  sheet: "Sheet"
+  signature: "Drawn and measured by Hub Performance."
+  complaints: "Complaints book"
+
+notfound:
+  title: "This sheet is not part of the project."
+  back: "Back to the floor plan"

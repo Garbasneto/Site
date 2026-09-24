@@ -1,0 +1,46 @@
+---
+/* Tecla G (só desktop): mostra e esconde a grelha de 12 colunas por cima do site. */
+---
+
+<div class="gridov" aria-hidden="true" data-grid-overlay hidden>
+  <div class="gridov__cols wrap grid">
+    {Array.from({ length: 12 }, () => <span />)}
+  </div>
+  <span class="gridov__label">GRID 12 COL</span>
+</div>
+
+<style>
+  .gridov {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-grid-overlay);
+    pointer-events: none;
+  }
+
+  .gridov[hidden] {
+    display: none;
+  }
+
+  .gridov__cols {
+    height: 100%;
+  }
+
+  .gridov__cols span {
+    background: color-mix(in srgb, var(--signal) 6%, transparent);
+    border-inline: 1px solid color-mix(in srgb, var(--signal) 24%, transparent);
+  }
+
+  .gridov__label {
+    position: absolute;
+    right: var(--margin);
+    bottom: var(--s-5);
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-label);
+    color: var(--graphite);
+  }
+
+  :global(html.on-dark) .gridov__label {
+    color: var(--paper);
+  }
+</style>

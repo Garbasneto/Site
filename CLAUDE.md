@@ -26,7 +26,7 @@ Público: arquitetos e designers de interiores com atelier próprio, 30 a 55 ano
 
 - Todo texto fica em arquivos por idioma em `src/content/` (YAML). Nada de texto solto em componente.
 - Configurações (WhatsApp por país, e-mail, redes, cidades, modo do formulário, URL do Respondi, faixas de faturamento) em `src/config/site.ts`.
-- Cases e depoimentos terão o campo `publicado`. Em desenvolvimento, os não publicados aparecem com marca d'água "EXEMPLO"; em produção, somem. Sem nenhum publicado, a folha e o item do índice somem.
+- Cases (`src/content/cases/*.yaml`) e depoimentos (`src/content/depoimentos/*.yaml`): um arquivo por item, com blocos `pt`/`en`/`es` para os textos e números uma vez só. Campo `publicado`: em desenvolvimento, os não publicados aparecem com marca d'água "EXEMPLO"; em produção, somem. Sem nenhum publicado, a folha e o item do índice somem e a numeração se ajusta (`src/components/Home.astro`).
 - Placeholders sempre no formato `[PREENCHER: o que é]`.
 
 ## Direção de arte
@@ -51,6 +51,9 @@ Público: arquitetos e designers de interiores com atelier próprio, 30 a 55 ano
 - Astro 7 + TypeScript, CSS próprio com tokens e estilos com escopo. Sem Tailwind.
 - GSAP (ScrollTrigger, SplitText, DrawSVG), Lenis. Sem WebGL e sem Three.js.
 - Adapter da Vercel; o endpoint do formulário é serverless (`prerender = false`).
+- Cada folha usa `src/components/Sheet.astro` (rótulo, título, apoio) e fica em `src/components/sheets/`. Linhas que abrem (Serviços, Perguntas): `Row.astro` + `src/scripts/rows.ts`.
+- Revelações: `data-reveal="lines"` (máscara por linha), `data-reveal="fade"`, `data-reveal-item` (itens de lista). JS das folhas em `src/scripts/sections.ts`, carregado à parte depois do hero.
+- Folhas escuras (`dark` no `Sheet`): fundo grafite próprio; a camada `[data-dark-layer]` escurece a página na aproximação e a classe `on-dark` no `<html>` inverte a barra, o indicador e o CTA do celular.
 - Planta do hero: dados em `src/data/plan.ts` (paisagem e retrato), geometria em `src/lib/plan/geometry.ts`, projeção em `src/lib/plan/camera.ts`, desenho em `src/lib/plan/renderer.ts`, leads em `src/lib/plan/leads.ts`, orquestração em `src/scripts/hero.ts`. Nunca desenhe a planta à mão em SVG: mude os dados.
 
 ## Orçamento de performance
@@ -69,10 +72,12 @@ npm run preview      serve o build
 npm run check        tipos (astro check) e regras de copy
 npm run check:copy   só as regras de copy
 npm run shots        screenshots do hero (390x844 e 1440x900) em screenshots/latest
+npm run shots:sheets screenshots de todas as folhas, índice, grelha e 404 em screenshots/sheets
 ```
 
 ## Modo de trabalho
 
 - Trabalho em etapas; no fim de cada uma, parar, mostrar e esperar aprovação. Se algo do briefing ficar feio na prática, propor a alternativa antes de mudar.
-- Antes de entregar qualquer etapa: rodar o site, tirar screenshots em 390x844 e 1440x900 (`npm run shots`), olhar, corrigir o que estiver desalinhado, apertado ou com cara de template.
+- Antes de entregar qualquer etapa: rodar o site, tirar screenshots em 390x844 e 1440x900 (`npm run shots` e `npm run shots:sheets`), olhar, corrigir o que estiver desalinhado, apertado ou com cara de template.
+- SplitText: não usar `tag: 'span'` (linhas ficam inline e a máscara deixa de funcionar).
 - Commit ao fim de cada etapa.

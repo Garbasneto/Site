@@ -1,0 +1,179 @@
+---
+/*
+  Linha indexada que abre e fecha (Serviços e Perguntas). Uma aberta por vez dentro do grupo [data-rows].
+  Sem JavaScript, todas ficam abertas.
+*/
+interface Props {
+  id: string;
+  number: string;
+  title: string;
+  summary?: string;
+  variant?: 'service' | 'faq';
+}
+
+const { id, number, title, summary, variant = 'service' } = Astro.props;
+---
+
+<div class:list={['row', `row--${variant}`]} data-row>
+  <h3 class="row__head">
+    <button class="row__btn" id={`${id}-btn`} aria-expanded="false" aria-controls={`${id}-panel`} data-row-toggle>
+      <span class="row__n">{number}</span>
+      <span class="row__title">{title}</span>
+      {summary && <span class="row__summary">{summary}</span>}
+      <span class="row__icon" aria-hidden="true"><i></i><i></i></span>
+    </button>
+  </h3>
+  <div class="row__panel" id={`${id}-panel`} role="region" aria-labelledby={`${id}-btn`} data-row-panel>
+    <div class="row__panel-inner grid">
+      <slot />
+    </div>
+  </div>
+  <span class="row__rule" aria-hidden="true"></span>
+  <span class="row__signal" aria-hidden="true"></span>
+</div>
+
+<style>
+  .row {
+    position: relative;
+  }
+
+  .row__rule,
+  .row__signal {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--rule);
+    transform-origin: left center;
+  }
+
+  .row__signal {
+    background: var(--signal);
+    transform: scaleX(0);
+    transition: transform var(--dur-2) var(--ease);
+  }
+
+  .row__btn {
+    display: grid;
+    grid-template-columns: 2.25rem minmax(0, 1fr) 1.5rem;
+    column-gap: var(--s-3);
+    row-gap: var(--s-2);
+    align-items: baseline;
+    width: 100%;
+    padding: var(--s-5) 0;
+    text-align: left;
+    font-weight: var(--weight-regular);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .row__n {
+    grid-row: 1;
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-label);
+    color: var(--fg-muted);
+  }
+
+  .row__title {
+    grid-column: 2;
+    font-size: var(--text-h3);
+    line-height: 1.1;
+    letter-spacing: var(--tracking-title);
+    font-weight: var(--weight-regular);
+    text-wrap: balance;
+  }
+
+  .row--faq .row__title {
+    font-size: clamp(1.1875rem, 1rem + 0.8vw, 1.625rem);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+  }
+
+  .row__summary {
+    grid-column: 2;
+    font-size: var(--text-body);
+    line-height: 1.45;
+    color: var(--fg-muted);
+    max-width: 46ch;
+    text-wrap: pretty;
+  }
+
+  .row__icon {
+    grid-column: 3;
+    grid-row: 1;
+    position: relative;
+    justify-self: end;
+    align-self: center;
+    width: 14px;
+    height: 14px;
+  }
+
+  .row__icon i {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    transition: transform var(--dur-1) var(--ease);
+  }
+
+  .row__icon i + i {
+    transform: rotate(90deg);
+  }
+
+  .row:global(.is-open) .row__icon i + i {
+    transform: rotate(90deg) scaleX(0);
+  }
+
+  .row__panel-inner {
+    padding: 0 0 var(--s-7);
+    row-gap: var(--s-6);
+  }
+
+  :global(.js) .row__panel {
+    display: none;
+  }
+
+  :global(.js) .row:global(.is-open) .row__panel {
+    display: block;
+  }
+
+  @media (hover: hover) {
+    .row__head:hover ~ .row__signal,
+    .row:global(.is-open) .row__signal {
+      transform: scaleX(1);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .row__btn {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: var(--gutter);
+      padding: var(--s-6) 0;
+    }
+
+    .row__n {
+      grid-column: 1;
+    }
+
+    .row__title {
+      grid-column: 2 / 7;
+    }
+
+    .row__summary {
+      grid-column: 7 / 12;
+      grid-row: 1;
+      padding-top: 0.35em;
+    }
+
+    .row--faq .row__title {
+      grid-column: 2 / 11;
+    }
+
+    .row__icon {
+      grid-column: 12;
+    }
+  }
+</style>

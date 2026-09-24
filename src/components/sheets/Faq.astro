@@ -1,0 +1,58 @@
+---
+/* F.07 · Perguntas frequentes. Mesma linguagem de linha dos serviços, com schema FAQPage. */
+import Sheet from '../Sheet.astro';
+import Row from '../Row.astro';
+import { isPlaceholder, type Home, type NumberedSheet } from '../../lib/content';
+
+interface Props {
+  content: Home['faq'];
+  sheet: NumberedSheet;
+  prefix: string;
+  total: string;
+}
+
+const { content, sheet, prefix, total } = Astro.props;
+const pad = (n: number) => String(n).padStart(2, '0');
+
+// Só perguntas com resposta real entram no schema.
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: content.items
+    .filter((i) => !isPlaceholder(i.a))
+    .map((i) => ({ '@type': 'Question', name: i.q, acceptedAnswer: { '@type': 'Answer', text: i.a } })),
+};
+---
+
+<Sheet id={sheet.id} prefix={prefix} number={sheet.number} total={total} label={sheet.label} title={content.title}>
+  <div class="faq wrap" data-rows>
+    {
+      content.items.map((item, i) => (
+        <Row id={`pergunta-${pad(i + 1)}`} number={pad(i + 1)} title={item.q} variant="faq">
+          <p class="faq__a">{item.a}</p>
+        </Row>
+      ))
+    }
+  </div>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+</Sheet>
+
+<style>
+  .faq {
+    border-top: 1px solid var(--rule);
+  }
+
+  .faq__a {
+    grid-column: 1 / -1;
+    max-width: var(--measure);
+    font-size: var(--text-lead);
+    line-height: 1.5;
+    color: var(--fg-muted);
+  }
+
+  @media (min-width: 768px) {
+    .faq__a {
+      grid-column: 2 / 10;
+    }
+  }
+</style>

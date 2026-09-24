@@ -1,0 +1,79 @@
+---
+/*
+  404: folha em branco com a grelha. O texto segue o idioma do endereço (/en, /es ou português).
+*/
+import Base from '../layouts/Base.astro';
+import { getHome } from '../lib/content';
+import { locales, path } from '../i18n';
+
+const texts = await Promise.all(locales.map(async (l) => ({ lang: l, ...(await getHome(l)).notfound })));
+const pt = texts[0];
+---
+
+<Base lang="pt" title={`${pt.title} · Hub Performance`} description={pt.title}>
+  <main class="nf" id="conteudo">
+    <p class="nf__code label">404</p>
+    {
+      texts.map((t) => (
+        <div class="nf__msg" data-nf={t.lang} lang={t.lang} hidden={t.lang !== 'pt'}>
+          <h1 class="nf__title">{t.title}</h1>
+          <a class="nf__back" href={path('home', t.lang)}>
+            {t.back}
+          </a>
+        </div>
+      ))
+    }
+  </main>
+</Base>
+
+<script is:inline>
+  (function () {
+    var m = location.pathname.match(/^\/(en|es)(\/|$)/);
+    if (!m) return;
+    document.documentElement.lang = m[1];
+    document.querySelectorAll('[data-nf]').forEach(function (el) {
+      el.hidden = el.getAttribute('data-nf') !== m[1];
+    });
+  })();
+</script>
+
+<style>
+  .nf {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--s-5);
+    padding: var(--s-9) var(--margin);
+    background-color: var(--paper);
+    background-image:
+      linear-gradient(to right, var(--grid-major) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-major) 1px, transparent 1px),
+      linear-gradient(to right, var(--grid-minor) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-minor) 1px, transparent 1px);
+    background-size:
+      40px 40px,
+      40px 40px,
+      8px 8px,
+      8px 8px;
+  }
+
+  .nf__title {
+    font-size: var(--text-h2);
+    font-weight: var(--weight-regular);
+    line-height: var(--leading-display);
+    letter-spacing: var(--tracking-display);
+    max-width: 16ch;
+  }
+
+  .nf__back {
+    display: inline-block;
+    margin-top: var(--s-6);
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+</style>

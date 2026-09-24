@@ -20,6 +20,11 @@ html {
   scrollbar-gutter: stable;
 }
 
+/* Nas folhas escuras, a calha da barra de rolagem e o "overscroll" acompanham o grafite. */
+html.on-dark {
+  background: var(--graphite);
+}
+
 body {
   min-height: 100svh;
   background: var(--bg);
@@ -152,6 +157,14 @@ html.lenis body {
   display: grid;
   grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
   column-gap: var(--gutter);
+}
+
+/* Máscaras de linha (SplitText): folga para acentos e descendentes não serem cortados */
+.rl-mask,
+.mline-mask,
+.tml-mask {
+  padding-block: 0.06em 0.16em;
+  margin-block: -0.06em -0.16em;
 }
 
 /* Botão: retângulo em grafite, fio de sinal que se desenha no hover */
