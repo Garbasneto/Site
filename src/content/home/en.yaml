@@ -1,0 +1,57 @@
+# Homepage copy in English (American). Adaptation, not literal translation.
+# Rules: no em or en dashes, no banned words (see CLAUDE.md).
+
+meta:
+  title: "Hub Performance · Marketing for architects and interior designers"
+  description: "Ads, funnels, CRM and sales process for architecture and interior design studios. A 90-day project with phases, deliverables and numbers."
+
+nav:
+  skip: "Skip to content"
+  home: "Hub Performance, home"
+  index: "Index"
+  cta: "Start your project"
+  language: "Language"
+  sheet_prefix: "S"
+
+sheets:
+  - { id: planta, label: "Floor plan", title: "Floor plan" }
+  - { id: servicos, label: "Services", title: "Services" }
+  - { id: projeto, label: "Method", title: "90-day project" }
+  - { id: resultados, label: "Results", title: "Results" }
+  - { id: palavra, label: "Clients", title: "In their words" }
+  - { id: para-quem, label: "Fit", title: "Who it is for" }
+  - { id: perguntas, label: "Questions", title: "Frequently asked questions" }
+  - { id: iniciar, label: "Start", title: "Start your project" }
+
+hero:
+  plan_description: "A floor plan drawn as a sales process: six rooms connected by a follow-up circulation, in funnel order. Acquisition, form, WhatsApp, diagnostic, proposal and contract. Orange dots are the leads: they come in through the main door, some stay behind at each stage and few reach the contract."
+  rooms:
+    atracao: { number: "01", name: "Acquisition", metric: "cost per lead" }
+    formulario: { number: "02", name: "Form", metric: "completion rate" }
+    whatsapp: { number: "03", name: "WhatsApp", metric: "response time" }
+    diagnostico: { number: "04", name: "Diagnostic", metric: "show-up rate" }
+    proposta: { number: "05", name: "Proposal", metric: "acceptance rate" }
+    contrato: { number: "06", name: "Contract", metric: "revenue" }
+  circulation: "Circulation / follow-up"
+  entrance: "Entrance"
+  dimension: "90 days"
+  scale_unit: "days"
+  north: "N"
+  title_block:
+    project_label: "Project"
+    project: "Marketing and sales process for architects and interior designers"
+    scale_label: "Scale"
+    scale: "1:90 days"
+    reach_label: "Reach"
+    reach: "4 continents"
+    lead_label: "Drawn by"
+    lead: "Hub Performance"
+    date_label: "Date"
+    sheet_label: "Sheet"
+  cta: "Start your project"
+
+manifesto:
+  lines:
+    - "Every detail of your project is drawn to the millimeter."
+    - "Your sales process is still improvised."
+  body: "Hub Performance designs that part: from the first ad to the signed contract, with the rigor of a technical drawing. Only for architects and interior designers."

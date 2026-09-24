@@ -1,0 +1,60 @@
+# Textos da página inicial em português.
+# Regras: sem travessão nem meia-risca, sem "você" e sem "tu", sem palavras proibidas (ver CLAUDE.md).
+# O que ainda não existe fica como [PREENCHER: o que é].
+
+meta:
+  title: "Hub Performance · Marketing para arquitetos e designers de interiores"
+  description: "Anúncios, funis, CRM e processo comercial para ateliers de arquitetura e estúdios de interiores. Projeto de 90 dias com fases, entregas e números."
+
+nav:
+  skip: "Ir para o conteúdo"
+  home: "Hub Performance, página inicial"
+  index: "Índice"
+  cta: "Iniciar projeto"
+  language: "Idioma"
+  sheet_prefix: "F"
+
+# Folhas do site, na ordem. A numeração (F.01 a F.08) é calculada sozinha
+# a partir das folhas visíveis.
+sheets:
+  - { id: planta, label: "Planta", title: "Planta" }
+  - { id: servicos, label: "Serviços", title: "Serviços" }
+  - { id: projeto, label: "Método", title: "Projeto de 90 dias" }
+  - { id: resultados, label: "Resultados", title: "Resultados" }
+  - { id: palavra, label: "Clientes", title: "Palavra de cliente" }
+  - { id: para-quem, label: "Para quem", title: "Para quem é" }
+  - { id: perguntas, label: "Perguntas", title: "Perguntas frequentes" }
+  - { id: iniciar, label: "Iniciar", title: "Iniciar projeto" }
+
+hero:
+  plan_description: "Planta baixa desenhada como um processo comercial: seis ambientes ligados por uma circulação de follow-up, na ordem do funil. Atração, formulário, WhatsApp, diagnóstico, proposta e contrato. Pontos laranja representam os pedidos: entram pela porta principal, parte deles fica em cada etapa e poucos chegam ao contrato."
+  rooms:
+    atracao: { number: "01", name: "Atração", metric: "custo por lead" }
+    formulario: { number: "02", name: "Formulário", metric: "taxa de conclusão" }
+    whatsapp: { number: "03", name: "WhatsApp", metric: "tempo de resposta" }
+    diagnostico: { number: "04", name: "Diagnóstico", metric: "taxa de presença" }
+    proposta: { number: "05", name: "Proposta", metric: "taxa de aceitação" }
+    contrato: { number: "06", name: "Contrato", metric: "receita" }
+  circulation: "Circulação / follow-up"
+  entrance: "Entrada"
+  dimension: "90 dias"
+  scale_unit: "dias"
+  north: "N"
+  title_block:
+    project_label: "Projeto"
+    project: "Marketing e processo comercial para arquitetos e designers de interiores"
+    scale_label: "Escala"
+    scale: "1:90 dias"
+    reach_label: "Alcance"
+    reach: "4 continentes"
+    lead_label: "Responsável"
+    lead: "Hub Performance"
+    date_label: "Data"
+    sheet_label: "Folha"
+  cta: "Iniciar projeto"
+
+manifesto:
+  lines:
+    - "Cada detalhe do seu projeto é desenhado ao milímetro."
+    - "O seu comercial ainda é improvisado."
+  body: "A Hub Performance desenha essa parte: do primeiro anúncio ao contrato assinado, com o rigor de um desenho técnico. Só para arquitetos e designers de interiores."

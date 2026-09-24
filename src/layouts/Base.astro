@@ -1,0 +1,42 @@
+---
+import '../styles/global.css';
+import { htmlLang, type Locale } from '../i18n';
+
+interface Props {
+  lang: Locale;
+  title: string;
+  description: string;
+  /** Classe extra no <body> (ex.: página escura). */
+  bodyClass?: string;
+}
+
+const { lang, title, description, bodyClass } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).toString().replace(/\/$/, '') || Astro.site?.toString();
+---
+
+<!doctype html>
+<html lang={htmlLang[lang]}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#f3f1ec" />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href="/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/geist-mono-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <script is:inline>
+      (function (d) {
+        var c = d.documentElement.classList;
+        c.add('js');
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) c.add('motion');
+      })(document);
+    </script>
+    <slot name="head" />
+  </head>
+  <body class={bodyClass}>
+    <slot />
+  </body>
+</html>

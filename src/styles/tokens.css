@@ -1,0 +1,106 @@
+/*
+  Tokens da Hub Performance.
+  Toda cor, fonte, medida e curva do site sai daqui. Para trocar a fonte por
+  uma licença paga (ex.: ABC Diatype e Diatype Mono), altere --font-sans e
+  --font-mono e os @font-face em fonts.css.
+*/
+
+:root {
+  /* Cor: monocromia quente de materiais e uma única cor de sinal */
+  --paper: #f3f1ec;
+  --graphite: #121211;
+  --concrete: #6e6c66;
+  --stone: #9b9890;
+  --signal: #ff4f00; /* "a construir": só o que se move, cresce ou vai ser construído */
+
+  --line: rgb(18 18 17 / 0.13);
+  --line-on-dark: rgb(243 241 236 / 0.13);
+  --grid-minor: rgb(18 18 17 / 0.03);
+  --grid-major: rgb(18 18 17 / 0.058);
+
+  /* Papel levemente sombreado, para as faces verticais da axonometria */
+  --paper-shade-1: #e6e3dc;
+  --paper-shade-2: #d9d6ce;
+
+  /* Papéis semânticos (as folhas escuras redefinem estes) */
+  --bg: var(--paper);
+  --fg: var(--graphite);
+  --fg-muted: var(--concrete);
+  --rule: var(--line);
+
+  /* Tipografia */
+  --font-sans: 'Geist', 'Geist Fallback', system-ui, sans-serif;
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback', ui-monospace, monospace;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+
+  --text-label: 0.6875rem; /* 11px, rótulos técnicos em mono */
+  --text-note: 0.75rem;
+  --text-small: 0.875rem;
+  --text-body: 1rem;
+  --text-lead: clamp(1.0625rem, 0.95rem + 0.45vw, 1.3125rem);
+  --text-h3: clamp(1.375rem, 1.1rem + 1vw, 2rem);
+  --text-h2: clamp(2.125rem, 1.35rem + 3vw, 4.25rem);
+  --text-display: clamp(2.25rem, 1.1rem + 4.2vw, 5.25rem);
+
+  --leading-display: 1.02;
+  --leading-title: 1.08;
+  --leading-body: 1.5;
+
+  --tracking-display: -0.038em;
+  --tracking-title: -0.024em;
+  --tracking-label: 0.09em;
+
+  --measure: 60ch;
+
+  /* Grelha: 4 colunas no celular, 12 a partir de 768 px */
+  --cols: 4;
+  --margin: 16px;
+  --gutter: 12px;
+  --nav-h: 56px;
+
+  /* Espaço */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 64px;
+  --s-9: 96px;
+  --s-10: 128px;
+  --s-11: 192px;
+
+  /* Fio */
+  --hairline: 1px;
+
+  /* Movimento: uma única curva, família expo out */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-1: 0.6s;
+  --dur-2: 0.9s;
+  --dur-3: 1.2s;
+
+  --z-grid: 1;
+  --z-nav: 50;
+  --z-overlay: 80;
+  --z-grid-overlay: 90;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --cols: 12;
+    --margin: clamp(24px, 3.4vw, 64px);
+    --gutter: clamp(16px, 1.4vw, 24px);
+    --nav-h: 64px;
+  }
+}
+
+/* Folhas escuras (Resultados, CTA final) */
+.sheet--dark {
+  --bg: var(--graphite);
+  --fg: var(--paper);
+  --fg-muted: var(--stone);
+  --rule: var(--line-on-dark);
+}

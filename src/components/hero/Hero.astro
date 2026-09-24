@@ -1,0 +1,393 @@
+---
+/*
+  F.01 · Planta (hero) e manifesto.
+  Primeiro quadro: papel, grelha, carimbo (com o H1) e botão já visíveis, sem animação de entrada.
+  A planta é desenhada em Canvas por src/scripts/hero.ts a partir de src/data/plan.ts.
+*/
+import Arrow from '../Arrow.astro';
+import { formatSheetDate, decimalSeparator, path, type Locale } from '../../i18n';
+import type { Home } from '../../lib/content';
+
+interface Props {
+  lang: Locale;
+  hero: Home['hero'];
+  manifesto: Home['manifesto'];
+  sheet: { number: string; total: string };
+}
+
+const { lang, hero, manifesto, sheet } = Astro.props;
+const tb = hero.title_block;
+const today = new Date();
+
+const clientData = {
+  lang,
+  decimal: decimalSeparator[lang],
+  text: {
+    rooms: hero.rooms,
+    circulation: hero.circulation,
+    entrance: hero.entrance,
+    dimension: hero.dimension,
+    scaleUnit: hero.scale_unit,
+    north: hero.north,
+  },
+};
+---
+
+<section class="hero" id="planta" data-sheet="planta" data-sheet-number={sheet.number} aria-labelledby="hero-title">
+  <div class="hero__track" data-hero-track>
+    <div class="hero__stage" data-hero-stage>
+      <div class="hero__frame" data-hero-frame>
+        <canvas class="hero__plan" data-hero-canvas role="img" aria-label={hero.plan_description}></canvas>
+        <canvas class="hero__plan hero__leads" data-hero-leads aria-hidden="true"></canvas>
+
+        <div class="hero__cursor" data-hero-cursor aria-hidden="true">
+          <span class="hero__cursor-x" data-cursor-x></span>
+          <span class="hero__cursor-y" data-cursor-y></span>
+          <span class="hero__cursor-label" data-cursor-label></span>
+        </div>
+
+        <div class="hero__sheet" data-hero-sheet>
+          <div class="tb">
+            <div class="tb__project">
+              <span class="tb__key">{tb.project_label}</span>
+              <h1 id="hero-title" class="tb__title">{tb.project}</h1>
+            </div>
+            <dl class="tb__fields">
+              <div class="tb__field">
+                <dt class="tb__key">{tb.scale_label}</dt>
+                <dd class="tb__value">{tb.scale}</dd>
+              </div>
+              <div class="tb__field">
+                <dt class="tb__key">{tb.reach_label}</dt>
+                <dd class="tb__value">{tb.reach}</dd>
+              </div>
+              <div class="tb__field">
+                <dt class="tb__key">{tb.sheet_label}</dt>
+                <dd class="tb__value">{sheet.number}/{sheet.total}</dd>
+              </div>
+              <div class="tb__field tb__field--wide">
+                <dt class="tb__key">{tb.lead_label}</dt>
+                <dd class="tb__value">{tb.lead}</dd>
+              </div>
+              <div class="tb__field">
+                <dt class="tb__key">{tb.date_label}</dt>
+                <dd class="tb__value">
+                  <time class="tb__date" data-sheet-date datetime={today.toISOString().slice(0, 10)}>
+                    {formatSheetDate(today, lang)}
+                  </time>
+                </dd>
+              </div>
+            </dl>
+          </div>
+          <a class="btn hero__cta" href={path('start', lang)} data-cta="hero" data-magnetic>
+            <span class="hero__cta-label">{hero.cta}</span>
+            <span class="btn__icon"><Arrow /></span>
+          </a>
+        </div>
+      </div>
+
+      <div class="hero__manifesto" data-hero-manifesto>
+        <div class="hero__manifesto-inner">
+          <p class="manifesto__line" data-manifesto-line>{manifesto.lines[0]}</p>
+          <p class="manifesto__line" data-manifesto-line>{manifesto.lines[1]}</p>
+          <p class="manifesto__body" data-manifesto-line>{manifesto.body}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="application/json" data-hero-data set:html={JSON.stringify(clientData)} />
+</section>
+
+<style>
+  .hero {
+    position: relative;
+  }
+
+  .hero__track {
+    position: relative;
+  }
+
+  :global(.motion) .hero__track {
+    height: 340svh;
+  }
+
+  .hero__stage {
+    position: relative;
+  }
+
+  :global(.motion) .hero__stage {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    min-height: 540px;
+    overflow: hidden;
+  }
+
+  /* Folha milimetrada: fios de 1 px, sem gradiente aparente */
+  .hero__frame {
+    position: relative;
+    height: 100svh;
+    min-height: 540px;
+    background-color: var(--paper);
+    background-image:
+      linear-gradient(to right, var(--grid-major) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-major) 1px, transparent 1px),
+      linear-gradient(to right, var(--grid-minor) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-minor) 1px, transparent 1px);
+    background-size:
+      40px 40px,
+      40px 40px,
+      8px 8px,
+      8px 8px;
+    background-position: center center;
+  }
+
+  .hero__plan {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero__leads {
+    pointer-events: none;
+  }
+
+  /* Carimbo */
+  .hero__sheet {
+    position: absolute;
+    left: var(--margin);
+    right: var(--margin);
+    bottom: calc(var(--margin) + env(safe-area-inset-bottom, 0px));
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-2);
+    z-index: 2;
+  }
+
+  .tb {
+    background: var(--paper);
+    border: 1px solid var(--graphite);
+  }
+
+  .tb__project {
+    padding: var(--s-3) var(--s-3) var(--s-4);
+  }
+
+  .tb__key {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    line-height: 1.2;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--concrete);
+  }
+
+  .tb__title {
+    margin-top: var(--s-2);
+    font-size: clamp(1.375rem, 0.95rem + 1.25vw, 1.875rem);
+    font-weight: var(--weight-medium);
+    line-height: 1.06;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+
+  /* Colunas com largura mínima em caracteres: nenhum valor é cortado. */
+  .tb__fields {
+    display: grid;
+    grid-template-columns: minmax(calc(9ch + 24px), 1fr) minmax(calc(13ch + 24px), 1.3fr) minmax(calc(10ch + 24px), 1fr);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    border-top: 1px solid var(--graphite);
+  }
+
+  .tb__field {
+    min-width: 0;
+    padding: var(--s-2) 10px 10px;
+    border-left: 1px solid var(--line);
+  }
+
+  .tb__field:nth-child(3n + 1),
+  .tb__field--wide {
+    border-left: 0;
+  }
+
+  .tb__field:nth-child(n + 4) {
+    border-top: 1px solid var(--line);
+  }
+
+  .tb__field--wide + .tb__field {
+    border-left: 1px solid var(--line);
+  }
+
+  .tb__field--wide {
+    grid-column: span 2;
+  }
+
+  .tb__value {
+    margin-top: 3px;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .tb__date {
+    display: inline-block;
+    min-width: 10ch;
+  }
+
+  .hero__cta {
+    width: 100%;
+    min-height: 54px;
+    view-transition-name: cta-sheet;
+  }
+
+  @media (min-width: 768px) {
+    .hero__sheet {
+      left: auto;
+      width: clamp(340px, 26vw, 440px);
+    }
+
+    .tb__fields,
+    .tb__value {
+      font-size: 0.75rem;
+    }
+
+    .tb__project {
+      padding: var(--s-4) var(--s-4) var(--s-5);
+    }
+
+    .tb__field {
+      padding: 10px var(--s-3) var(--s-3);
+    }
+
+    .hero__cta {
+      min-height: 58px;
+    }
+  }
+
+  /* Cursor de CAD (só com mouse) */
+  .hero__cursor {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s linear;
+    z-index: 1;
+  }
+
+  .hero__cursor:global(.is-on) {
+    opacity: 1;
+  }
+
+  .hero__cursor-x,
+  .hero__cursor-y {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: rgb(18 18 17 / 0.2);
+    will-change: transform;
+  }
+
+  .hero__cursor-x {
+    width: 100%;
+    height: 1px;
+  }
+
+  .hero__cursor-y {
+    width: 1px;
+    height: 100%;
+  }
+
+  .hero__cursor-label {
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.06em;
+    color: var(--graphite);
+    white-space: pre;
+    will-change: transform;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .hero__frame {
+      cursor: crosshair;
+    }
+
+    .hero__sheet {
+      cursor: auto;
+    }
+  }
+
+  /* Manifesto */
+  .hero__manifesto {
+    padding: var(--s-9) var(--margin);
+  }
+
+  .hero__manifesto-inner {
+    max-width: 34rem;
+  }
+
+  .manifesto__line {
+    font-size: clamp(1.875rem, 1rem + 2.9vw, 4rem);
+    font-weight: var(--weight-regular);
+    line-height: 1.02;
+    letter-spacing: -0.038em;
+    text-wrap: balance;
+  }
+
+  .manifesto__line + .manifesto__line {
+    margin-top: 0.42em;
+  }
+
+  .manifesto__body {
+    margin-top: var(--s-6);
+    max-width: 44ch;
+    font-size: var(--text-lead);
+    line-height: 1.45;
+    color: var(--concrete);
+  }
+
+  :global(.motion) .hero__manifesto {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    padding: calc(var(--nav-h) + var(--s-4)) var(--margin) calc(var(--margin) + env(safe-area-inset-bottom, 0px) + var(--s-4));
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  :global(.motion) .hero__manifesto:global(.is-ready) {
+    opacity: 1;
+  }
+
+  @media (min-width: 768px) {
+    .hero__manifesto-inner {
+      max-width: min(44vw, 40rem);
+    }
+
+    :global(.motion) .hero__manifesto {
+      align-items: center;
+      padding-top: var(--nav-h);
+    }
+
+    .manifesto__body {
+      margin-top: var(--s-7);
+    }
+  }
+
+  :global(.mask-line) {
+    display: block;
+    overflow: clip;
+    padding-bottom: 0.08em;
+    margin-bottom: -0.08em;
+  }
+</style>

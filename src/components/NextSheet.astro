@@ -1,0 +1,32 @@
+---
+/* Provisório da Etapa 1: só o cabeçalho da folha seguinte, para ver a passagem do hero. */
+import type { NumberedSheet } from '../lib/content';
+
+interface Props {
+  prefix: string;
+  sheet: NumberedSheet;
+}
+
+const { prefix, sheet } = Astro.props;
+---
+
+<section class="next wrap" id={sheet.id} data-sheet={sheet.id}>
+  <p class="label">{prefix}.{sheet.number} · {sheet.label}</p>
+  <h2 class="next__title">{sheet.title}</h2>
+</section>
+
+<style>
+  .next {
+    min-height: 80svh;
+    padding-top: var(--s-10);
+    padding-bottom: var(--s-10);
+    border-top: 1px solid var(--line);
+  }
+
+  .next__title {
+    margin-top: var(--s-4);
+    font-size: var(--text-h2);
+    letter-spacing: var(--tracking-display);
+    line-height: var(--leading-display);
+  }
+</style>

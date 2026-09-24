@@ -1,0 +1,57 @@
+# Textos de la página de inicio en español de España, tratando de tú.
+# Reglas: sin raya ni semirraya, sin palabras prohibidas (ver CLAUDE.md).
+
+meta:
+  title: "Hub Performance · Marketing para arquitectos e interioristas"
+  description: "Anuncios, embudos, CRM y proceso comercial para estudios de arquitectura e interiorismo. Proyecto de 90 días con fases, entregables y números."
+
+nav:
+  skip: "Ir al contenido"
+  home: "Hub Performance, inicio"
+  index: "Índice"
+  cta: "Iniciar proyecto"
+  language: "Idioma"
+  sheet_prefix: "L"
+
+sheets:
+  - { id: planta, label: "Planta", title: "Planta" }
+  - { id: servicos, label: "Servicios", title: "Servicios" }
+  - { id: projeto, label: "Método", title: "Proyecto de 90 días" }
+  - { id: resultados, label: "Resultados", title: "Resultados" }
+  - { id: palavra, label: "Clientes", title: "Palabra de cliente" }
+  - { id: para-quem, label: "Para quién", title: "Para quién es" }
+  - { id: perguntas, label: "Preguntas", title: "Preguntas frecuentes" }
+  - { id: iniciar, label: "Iniciar", title: "Iniciar proyecto" }
+
+hero:
+  plan_description: "Una planta dibujada como un proceso comercial: seis estancias unidas por una circulación de seguimiento, en el orden del embudo. Captación, formulario, WhatsApp, diagnóstico, propuesta y contrato. Los puntos naranjas son las solicitudes: entran por la puerta principal, una parte se queda en cada etapa y pocas llegan al contrato."
+  rooms:
+    atracao: { number: "01", name: "Captación", metric: "coste por lead" }
+    formulario: { number: "02", name: "Formulario", metric: "tasa de finalización" }
+    whatsapp: { number: "03", name: "WhatsApp", metric: "tiempo de respuesta" }
+    diagnostico: { number: "04", name: "Diagnóstico", metric: "tasa de asistencia" }
+    proposta: { number: "05", name: "Propuesta", metric: "tasa de aceptación" }
+    contrato: { number: "06", name: "Contrato", metric: "ingresos" }
+  circulation: "Circulación / seguimiento"
+  entrance: "Entrada"
+  dimension: "90 días"
+  scale_unit: "días"
+  north: "N"
+  title_block:
+    project_label: "Proyecto"
+    project: "Marketing y proceso comercial para arquitectos e interioristas"
+    scale_label: "Escala"
+    scale: "1:90 días"
+    reach_label: "Alcance"
+    reach: "4 continentes"
+    lead_label: "Responsable"
+    lead: "Hub Performance"
+    date_label: "Fecha"
+    sheet_label: "Lámina"
+  cta: "Iniciar proyecto"
+
+manifesto:
+  lines:
+    - "Cada detalle de tu proyecto se dibuja al milímetro."
+    - "Tu proceso comercial todavía se improvisa."
+  body: "Hub Performance diseña esa parte: del primer anuncio al contrato firmado, con el rigor de un dibujo técnico. Solo para arquitectos e interioristas."

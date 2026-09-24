@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from './Header.astro';
+import Hero from './hero/Hero.astro';
+import NextSheet from './NextSheet.astro';
+import { getHome, numberSheets } from '../lib/content';
+import type { Locale } from '../i18n';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const home = await getHome(lang);
+// Etapa 2 decide quais folhas somem (cases e depoimentos sem nada publicado).
+const sheets = numberSheets(home.sheets);
+const planta = sheets.list.find((s) => s.id === 'planta')!;
+const next = sheets.list[1];
+---
+
+<Base lang={lang} title={home.meta.title} description={home.meta.description}>
+  <Header lang={lang} nav={home.nav} />
+  <main id="conteudo">
+    <Hero lang={lang} hero={home.hero} manifesto={home.manifesto} sheet={{ number: planta.number, total: sheets.total }} />
+    <NextSheet prefix={home.nav.sheet_prefix} sheet={next} />
+  </main>
+</Base>
+
+<script>
+  import '../scripts/home';
+</script>

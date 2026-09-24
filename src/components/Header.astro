@@ -1,0 +1,157 @@
+---
+import Wordmark from './Wordmark.astro';
+import Arrow from './Arrow.astro';
+import { locales, path, type Locale, type RouteKey } from '../i18n';
+import type { Home } from '../lib/content';
+
+interface Props {
+  lang: Locale;
+  nav: Home['nav'];
+  route?: RouteKey;
+}
+
+const { lang, nav, route = 'home' } = Astro.props;
+---
+
+<a class="skip-link" href="#conteudo">{nav.skip}</a>
+<header class="nav" data-nav>
+  <a class="nav__home" href={path('home', lang)} aria-label={nav.home}>
+    <Wordmark />
+  </a>
+  <div class="nav__right">
+    <nav aria-label={nav.language}>
+      <ul class="nav__lang">
+        {
+          locales.map((l) => (
+            <li>
+              <a
+                href={path(route, l)}
+                hreflang={l}
+                lang={l}
+                aria-current={l === lang ? 'true' : undefined}
+                data-lang-link={l}
+              >
+                {l.toUpperCase()}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <button class="nav__index" type="button" aria-expanded="false" aria-controls="sheet-index" data-index-toggle>
+      <span class="nav__index-icon" aria-hidden="true"></span>
+      {nav.index}
+    </button>
+    <a class="btn btn--compact nav__cta" href={path('start', lang)} data-cta="nav">
+      {nav.cta}
+      <span class="btn__icon"><Arrow /></span>
+    </a>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: var(--z-nav);
+    height: var(--nav-h);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: var(--margin);
+    border-bottom: 1px solid transparent;
+    transition:
+      transform var(--dur-1) var(--ease),
+      background-color 0.3s linear,
+      border-color 0.3s linear;
+  }
+
+  .nav:global(.is-hidden) {
+    transform: translateY(-101%);
+  }
+
+  .nav:global(.is-solid) {
+    background: var(--paper);
+    border-bottom-color: var(--line);
+  }
+
+  .nav:focus-within {
+    transform: none;
+  }
+
+  .nav__home {
+    display: inline-flex;
+    align-items: center;
+    height: 44px;
+  }
+
+  .nav__right {
+    display: flex;
+    align-items: center;
+    gap: var(--s-5);
+  }
+
+  .nav__lang {
+    display: flex;
+    gap: var(--s-1);
+    list-style: none;
+    padding: 0;
+  }
+
+  .nav__lang a,
+  .nav__index {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--concrete);
+    transition: color 0.2s linear;
+  }
+
+  .nav__lang a {
+    padding-inline: 5px;
+  }
+
+  .nav__lang a[aria-current='true'] {
+    color: var(--graphite);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+  }
+
+  .nav__index {
+    gap: var(--s-2);
+    color: var(--graphite);
+  }
+
+  .nav__index-icon {
+    position: relative;
+    width: 14px;
+    height: 7px;
+    border-top: 1px solid currentColor;
+    border-bottom: 1px solid currentColor;
+  }
+
+  @media (hover: hover) {
+    .nav__lang a:hover {
+      color: var(--graphite);
+    }
+  }
+
+  .nav__cta {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .nav__cta {
+      display: inline-flex;
+    }
+
+    .nav__right {
+      gap: var(--s-6);
+    }
+  }
+</style>
