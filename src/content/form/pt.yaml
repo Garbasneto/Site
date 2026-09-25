@@ -85,7 +85,7 @@ done:
   title: "Candidatura recebida."
   support: "O próximo passo é uma conversa rápida no WhatsApp."
   button: "Falar agora no WhatsApp"
-  message: "Olá, sou {name}, do {studio}. Acabei de enviar a candidatura pelo site."
+  message: "Olá, sou {name} ({studio}). Acabei de enviar a candidatura pelo site."
   back: "Voltar ao site"
 
 # Modo externo (FORM_MODE=external): a página leva ao Respondi.

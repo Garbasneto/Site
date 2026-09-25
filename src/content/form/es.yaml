@@ -84,7 +84,7 @@ done:
   title: "Solicitud recibida."
   support: "El siguiente paso es una conversación rápida por WhatsApp."
   button: "Hablar ahora por WhatsApp"
-  message: "Hola, soy {name}, de {studio}. Acabo de enviar la solicitud por la web."
+  message: "Hola, soy {name} ({studio}). Acabo de enviar la solicitud por la web."
   back: "Volver a la web"
 
 external:

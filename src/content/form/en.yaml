@@ -84,7 +84,7 @@ done:
   title: "Application received."
   support: "The next step is a quick conversation on WhatsApp."
   button: "Chat on WhatsApp now"
-  message: "Hi, I'm {name}, from {studio}. I just sent my application through the website."
+  message: "Hi, I'm {name} ({studio}). I just sent my application through the website."
   back: "Back to the site"
 
 external:

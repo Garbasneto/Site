@@ -16,7 +16,7 @@ export const site = {
   name: 'Hub Performance',
   /** Domínio oficial [confirmar]. */
   domain: 'hubperformance.io',
-  email: '[PREENCHER: e-mail de contato]',
+  email: '[PREENCHER: e-mail comercial]',
   instagram: {
     handle: '@grupohub.co',
     url: 'https://www.instagram.com/grupohub.co/',

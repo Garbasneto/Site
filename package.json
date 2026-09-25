@@ -11,7 +11,8 @@
     "check:copy": "node scripts/check-copy.mjs",
     "shots": "node scripts/screenshots.mjs",
     "shots:sheets": "node scripts/screenshots-sheets.mjs",
-    "og": "node scripts/og-images.mjs"
+    "og": "node scripts/og-images.mjs",
+    "check:launch": "node scripts/check-launch.mjs"
   },
   "dependencies": {
     "@astrojs/vercel": "^11.0.11",

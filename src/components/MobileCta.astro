@@ -10,10 +10,12 @@ interface Props {
 const { href, label } = Astro.props;
 ---
 
-<a class="mcta" href={href} data-cta="mobile-bar" data-mobile-cta tabindex="-1" aria-hidden="true">
-  <span>{label}</span>
-  <span class="btn__icon"><Arrow /></span>
-</a>
+<aside aria-label={label} aria-hidden="true">
+  <a class="mcta" href={href} data-cta="mobile-bar" data-mobile-cta tabindex="-1">
+    <span>{label}</span>
+    <span class="btn__icon"><Arrow /></span>
+  </a>
+</aside>
 
 <style>
   .mcta {

@@ -1,5 +1,7 @@
 # Site da Hub Performance
 
+> Para publicar na Vercel e ligar o domínio, siga `docs/PUBLICAR.md`. Antes de abrir ao público, `npm run build && npm run check:launch` lista o que ainda está como `[PREENCHER]`.
+
 Página única com oito folhas de projeto, em português, inglês e espanhol. Feito com Astro, publicado na Vercel.
 
 ## Rodar no computador

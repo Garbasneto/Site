@@ -16,11 +16,19 @@ export function initSheetIndex() {
   const focusables = () =>
     [...panel.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')].filter((el) => el.offsetParent !== null);
 
+  // Depois da próxima pintura: o toque responde na hora e o painel entra no quadro seguinte (INP).
+  const afterPaint = (fn: () => void) => requestAnimationFrame(() => window.setTimeout(fn, 0));
+
   const show = () => {
     if (open) return;
     open = true;
-    panel.hidden = false;
     toggle.setAttribute('aria-expanded', 'true');
+    afterPaint(reveal);
+  };
+
+  const reveal = () => {
+    if (!open) return;
+    panel.hidden = false;
     document.documentElement.classList.add('index-open');
     lenis?.stop();
     document.body.style.overflow = 'hidden';

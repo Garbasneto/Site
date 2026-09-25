@@ -76,7 +76,10 @@ export function initSheets() {
     if (!bar || on === barOn) return;
     barOn = on;
     bar.classList.toggle('is-visible', on);
-    bar.toggleAttribute('aria-hidden', !on);
+    // aria-hidden no <aside> inteiro, com "true" explícito (vazio não esconde dos leitores de ecrã).
+    const region = bar.closest('aside') ?? bar;
+    if (on) region.removeAttribute('aria-hidden');
+    else region.setAttribute('aria-hidden', 'true');
     bar.tabIndex = on ? 0 : -1;
   };
 

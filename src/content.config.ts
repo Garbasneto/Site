@@ -323,7 +323,7 @@ const form = defineCollection({
       title: z.string(),
       support: z.string(),
       button: z.string(),
-      /** "Olá, sou {name}, do {studio}. ..." */
+      /** "Olá, sou {name} ({studio}). ..." */
       message: z.string(),
       back: z.string(),
     }),

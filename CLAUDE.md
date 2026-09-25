@@ -72,11 +72,12 @@ Público: arquitetos e designers de interiores com atelier próprio, 30 a 55 ano
 npm install          instala dependências
 npm run dev          servidor local em http://localhost:4321
 npm run build        build de produção (pasta dist/ e .vercel/)
-npm run preview      serve o build
+npm run preview      não serve este build (rota serverless); para medir, sirva .vercel/output/static
 npm run check        tipos (astro check) e regras de copy
 npm run check:copy   só as regras de copy
 npm run shots        screenshots do hero (390x844 e 1440x900) em screenshots/latest
 npm run shots:sheets screenshots de todas as folhas, índice, grelha e 404 em screenshots/sheets
+npm run check:launch depois do build: lista [PREENCHER] e confere exemplos e travessões no HTML final
 npm run og           imagens de partilha (public/og) a partir do hero, com PUBLIC_DRAFTS=off npm run dev rodando
 ```
 

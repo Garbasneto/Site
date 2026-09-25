@@ -28,10 +28,13 @@ const viewports = [
   { name: 'desktop-1440x900', options: { viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 } },
 ];
 
+// Navegador no idioma da página: é o que o visitante desse idioma vê (sem sugestão de troca).
+const LOCALE = process.env.LOCALE ?? ({ en: 'en-US', es: 'es-ES' }[(process.env.PAGE ?? '/').split('/')[1]] ?? 'pt-PT');
+
 const errors = [];
 
 async function shootIntro(browser, vp, reduced) {
-  const context = await browser.newContext({ ...vp.options, reducedMotion: reduced ? 'reduce' : 'no-preference' });
+  const context = await browser.newContext({ ...vp.options, locale: LOCALE, reducedMotion: reduced ? 'reduce' : 'no-preference' });
   // A nota de cookies tem capturas próprias; aqui a escolha já está feita (COOKIE_NOTE=1 mostra a nota).
   if (!process.env.COOKIE_NOTE)
     await context.addInitScript(() => localStorage.setItem('hp-consent', JSON.stringify({ v: 1, analytics: false, ads: false, t: Date.now() })));
